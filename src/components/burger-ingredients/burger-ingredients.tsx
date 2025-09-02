@@ -1,6 +1,8 @@
 import { Tab } from '@krgaa/react-developer-burger-ui-components';
+import { useState } from 'react';
 
-import type { TIngredient } from '@utils/types';
+import type { TIngredient, TIngredientType } from '@utils/types';
+import type { JSX } from 'react';
 
 import styles from './burger-ingredients.module.css';
 
@@ -8,44 +10,67 @@ type TBurgerIngredientsProps = {
   ingredients: TIngredient[];
 };
 
+type TBurgerIngredientsTab = {
+  key: TIngredientType;
+  name: string;
+};
+
+/**
+ * Список ингредиентов.
+ */
 export const BurgerIngredients = ({
   ingredients,
 }: TBurgerIngredientsProps): React.JSX.Element => {
   console.log(ingredients);
 
+  const tabs: TBurgerIngredientsTab[] = [
+    {
+      key: 'bun',
+      name: 'Булки',
+    },
+    {
+      key: 'main',
+      name: 'Начинки',
+    },
+    {
+      key: 'sauce',
+      name: 'Соусы',
+    },
+  ];
+
+  const [activeTab, setActiveTab] = useState<string>('bun');
+  const [items, setItems] = useState<JSX.Element[]>([]);
+
   return (
     <section className={styles.burger_ingredients}>
       <nav>
         <ul className={styles.menu}>
-          <Tab
-            value="bun"
-            active={true}
-            onClick={() => {
-              /* TODO */
-            }}
-          >
-            Булки
-          </Tab>
-          <Tab
-            value="main"
-            active={false}
-            onClick={() => {
-              /* TODO */
-            }}
-          >
-            Начинки
-          </Tab>
-          <Tab
-            value="sauce"
-            active={false}
-            onClick={() => {
-              /* TODO */
-            }}
-          >
-            Соусы
-          </Tab>
+          {tabs.map((tab) => {
+            return (
+              <Tab
+                key={`tab_${tab.key}`}
+                value={tab.key}
+                active={activeTab === tab.key}
+                onClick={() => {
+                  setActiveTab(tab.key);
+                  setItems(
+                    ingredients
+                      .filter((ing) => ing.type === tab.key)
+                      .map((bun) => {
+                        return (
+                          <p key={`ingredient_${tab.key}_${bun._id}`}>{bun.name}</p>
+                        );
+                      })
+                  );
+                }}
+              >
+                {tab.name}
+              </Tab>
+            );
+          })}
         </ul>
       </nav>
+      <>{items}</>
     </section>
   );
 };

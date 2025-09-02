@@ -6,6 +6,9 @@ type TBurgerConstructorProps = {
   ingredients: TIngredient[];
 };
 
+/**
+ * Tекущий состав бургера.
+ */
 export const BurgerConstructor = ({
   ingredients,
 }: TBurgerConstructorProps): React.JSX.Element => {

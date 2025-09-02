@@ -7,6 +7,9 @@ import {
 
 import styles from './app-header.module.css';
 
+/**
+ * Шапка приложения.
+ */
 export const AppHeader = (): React.JSX.Element => {
   return (
     <header className={styles.header}>
