@@ -2,7 +2,6 @@ import { Tab } from '@krgaa/react-developer-burger-ui-components';
 import { useState } from 'react';
 
 import type { TIngredient, TIngredientType } from '@utils/types';
-import type { JSX } from 'react';
 
 import styles from './burger-ingredients.module.css';
 
@@ -38,8 +37,12 @@ export const BurgerIngredients = ({
     },
   ];
 
-  const [activeTab, setActiveTab] = useState<string>('bun');
-  const [items, setItems] = useState<JSX.Element[]>([]);
+  const getItems = (tabKey: TIngredientType): TIngredient[] => {
+    return ingredients.filter((ing) => ing.type === tabKey);
+  };
+
+  const [activeTab, setActiveTab] = useState<string>(tabs[0].key);
+  const [items, setItems] = useState<TIngredient[]>(getItems(tabs[0].key));
 
   return (
     <section className={styles.burger_ingredients}>
@@ -53,15 +56,7 @@ export const BurgerIngredients = ({
                 active={activeTab === tab.key}
                 onClick={() => {
                   setActiveTab(tab.key);
-                  setItems(
-                    ingredients
-                      .filter((ing) => ing.type === tab.key)
-                      .map((bun) => {
-                        return (
-                          <p key={`ingredient_${tab.key}_${bun._id}`}>{bun.name}</p>
-                        );
-                      })
-                  );
+                  setItems(getItems(tab.key));
                 }}
               >
                 {tab.name}
@@ -70,7 +65,11 @@ export const BurgerIngredients = ({
           })}
         </ul>
       </nav>
-      <>{items}</>
+      <>
+        {items.map((bun) => {
+          return <p key={`ingredient_${bun.type}_${bun._id}`}>{bun.name}</p>;
+        })}
+      </>
     </section>
   );
 };
