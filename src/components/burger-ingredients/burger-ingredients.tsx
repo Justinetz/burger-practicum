@@ -37,12 +37,14 @@ export const BurgerIngredients = ({
     },
   ];
 
-  const getItems = (tabKey: TIngredientType): TIngredient[] => {
+  const getIngredients = (tabKey: TIngredientType): TIngredient[] => {
     return ingredients.filter((ing) => ing.type === tabKey);
   };
 
   const [activeTab, setActiveTab] = useState<string>(tabs[0].key);
-  const [items, setItems] = useState<TIngredient[]>(getItems(tabs[0].key));
+  const [activeItems, setActiveItems] = useState<TIngredient[]>(
+    getIngredients(tabs[0].key)
+  );
 
   return (
     <section className={styles.burger_ingredients}>
@@ -56,7 +58,7 @@ export const BurgerIngredients = ({
                 active={activeTab === tab.key}
                 onClick={() => {
                   setActiveTab(tab.key);
-                  setItems(getItems(tab.key));
+                  setActiveItems(getIngredients(tab.key));
                 }}
               >
                 {tab.name}
@@ -66,7 +68,7 @@ export const BurgerIngredients = ({
         </ul>
       </nav>
       <>
-        {items.map((bun) => {
+        {activeItems.map((bun) => {
           return <p key={`ingredient_${bun.type}_${bun._id}`}>{bun.name}</p>;
         })}
       </>
