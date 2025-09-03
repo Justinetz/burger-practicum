@@ -67,11 +67,21 @@ export const BurgerIngredients = ({
           })}
         </ul>
       </nav>
-      <>
-        {activeItems.map((bun) => {
-          return <p key={`ingredient_${bun.type}_${bun._id}`}>{bun.name}</p>;
+      <div className={styles.burger_ingredients_list}>
+        {activeItems.map((item, index) => {
+          return (
+            <div
+              key={`ingredient_${item.type}_${item._id}`}
+              className={styles.burger_ingredient_card}
+              style={{ gridRow: Math.floor(index / 2) }}
+            >
+              <img alt={item.name} src={item.image} />
+              <p className="text text_type_digits-default">{item.price}</p>
+              <p>{item.name}</p>
+            </div>
+          );
         })}
-      </>
+      </div>
     </section>
   );
 };
