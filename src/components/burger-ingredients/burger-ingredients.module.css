@@ -23,6 +23,16 @@
   height: fit-content;
 }
 
+.burger_ingredient_price {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+}
+
+.burger_ingredient_name {
+  text-align: center;
+}
+
 .menu {
   display: flex;
   margin: 0;

@@ -1,4 +1,4 @@
-import { Tab } from '@krgaa/react-developer-burger-ui-components';
+import { CurrencyIcon, Tab } from '@krgaa/react-developer-burger-ui-components';
 import { useState } from 'react';
 
 import type { TIngredient, TIngredientType } from '@utils/types';
@@ -76,8 +76,15 @@ export const BurgerIngredients = ({
               style={{ gridRow: Math.floor(index / 2) }}
             >
               <img alt={item.name} src={item.image} />
-              <p className="text text_type_digits-default">{item.price}</p>
-              <p>{item.name}</p>
+              <div className={styles.burger_ingredient_price}>
+                <p className="text text_type_digits-default">{item.price}</p>
+                <CurrencyIcon type="primary" />
+              </div>
+              <p
+                className={`text text_type_main-default ${styles.burger_ingredient_name}`}
+              >
+                {item.name}
+              </p>
             </div>
           );
         })}

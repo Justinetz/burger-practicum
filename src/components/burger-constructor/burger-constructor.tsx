@@ -1,3 +1,5 @@
+import { ConstructorElement } from '@krgaa/react-developer-burger-ui-components';
+
 import type { TIngredient, TIngredientType } from '@utils/types';
 
 import styles from './burger-constructor.module.css';
@@ -37,21 +39,48 @@ export const BurgerConstructor = ({
 
   return (
     <section className={styles.burger_constructor}>
-      {burgerOrders.top.types.map((t) =>
-        ingredients
-          .filter((i) => i.type == t)
-          .map((i) => <div key={`${t}_${i._id}`}>{i.name}</div>)
-      )}
-      {burgerOrders.middle.types.map((t) =>
-        ingredients
-          .filter((i) => i.type == t)
-          .map((i) => <div key={`${t}_${i._id}`}>{i.name}</div>)
-      )}
-      {burgerOrders.bottom.types.map((t) =>
-        ingredients
-          .filter((i) => i.type == t)
-          .map((i) => <div key={`${t}_${i._id}`}>{i.name}</div>)
-      )}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        {burgerOrders.top.types.map((t) =>
+          ingredients
+            .filter((i) => i.type == t)
+            .map((i) => (
+              <ConstructorElement
+                key={`${t}_${i._id}`}
+                type="top"
+                isLocked={true}
+                price={i.price}
+                text={i.name}
+                thumbnail={i.image}
+              />
+            ))
+        )}
+        {burgerOrders.middle.types.map((t) =>
+          ingredients
+            .filter((i) => i.type == t)
+            .map((i) => (
+              <ConstructorElement
+                key={`${t}_${i._id}`}
+                price={i.price}
+                text={i.name}
+                thumbnail={i.image}
+              />
+            ))
+        )}
+        {burgerOrders.bottom.types.map((t) =>
+          ingredients
+            .filter((i) => i.type == t)
+            .map((i) => (
+              <ConstructorElement
+                key={`${t}_${i._id}`}
+                type="bottom"
+                isLocked={true}
+                price={i.price}
+                text={i.name}
+                thumbnail={i.image}
+              />
+            ))
+        )}
+      </div>
     </section>
   );
 };
