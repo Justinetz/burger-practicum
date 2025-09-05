@@ -1,7 +1,8 @@
 import { Counter, CurrencyIcon, Tab } from '@krgaa/react-developer-burger-ui-components';
 import { useState } from 'react';
 
-import { IngredientDetals } from '../ingredient-details/ingredient-details';
+import { PopupIngredientDetals } from '../popup-ingredient-details/popup-ingredient-details';
+import { PopupOverlay } from '../popup-overlay/popup-overlay';
 
 import type { TIngredient, TIngredientType } from '@utils/types';
 import type { JSX } from 'react';
@@ -129,11 +130,12 @@ export const BurgerIngredients = ({
           );
         })}
       </div>
-      <IngredientDetals
+      <PopupOverlay isOpen={isDetailsOpen} />
+      <PopupIngredientDetals
         isOpen={isDetailsOpen}
         ingredient={detailsItem}
         onClose={onCloseDetails}
-      ></IngredientDetals>
+      ></PopupIngredientDetals>
     </section>
   );
 };

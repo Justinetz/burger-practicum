@@ -4,19 +4,19 @@ import { createPortal } from 'react-dom';
 import type { TIngredient } from '../../utils/types';
 import type { JSX } from 'react';
 
-import styles from './ingredient-details.module.css';
+import styles from './popup-ingredient-details.module.css';
 
-type TIngredientDetalsProps = {
+type TPopupIngredientDetalsProps = {
   isOpen: boolean;
   ingredient: TIngredient | null;
   onClose: () => void;
 };
 
-export const IngredientDetals = ({
+export const PopupIngredientDetals = ({
   isOpen,
   ingredient,
   onClose,
-}: TIngredientDetalsProps): React.JSX.Element | null => {
+}: TPopupIngredientDetalsProps): React.JSX.Element | null => {
   if (!isOpen || !ingredient) {
     return null;
   }

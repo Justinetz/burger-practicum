@@ -1,0 +1,38 @@
+.order_root {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  background-color: #191b1f;
+  border-width: 0;
+  border-radius: 25px;
+  transform: translate(-50%, -50%);
+}
+
+.order_close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.order_ok {
+  justify-self: center;
+  width: 120px;
+  height: 120px;
+}
+
+.order_num {
+  text-shadow:
+    #1a1a6c 0 -4px 32px,
+    #1a1a6c 0 4px 32px,
+    #1a1a6c -4px 0 32px,
+    #1a1a6c 4px 0 32px,
+    #151556 0 8px 8px,
+    #151556 -8px 0 8px,
+    #151556 8px 0 8px,
+    #151556 -8px 0 8px,
+    #151556 0 8px 16px,
+    #151556 -8px 0 16px,
+    #151556 8px 0 16px,
+    #151556 -8px 0 16px;
+}
