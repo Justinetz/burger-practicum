@@ -10,7 +10,11 @@ import type { TIngredient } from '../../utils/types';
 import styles from './app.module.css';
 
 export const App = (): React.JSX.Element => {
-  const [ingredientsInUse, setIngredientsInUse] = useState<TIngredient[]>([]);
+  // На первом этапе по умолчанию конструктор заполнен всем
+  const [ingredientsInUse, setIngredientsInUse] = useState<TIngredient[]>([
+    ...ingredients.filter((i) => i.type !== 'bun'),
+    ingredients.find((i) => i.type === 'bun')!,
+  ]);
 
   const addIngredientToChart = (ingredient: TIngredient): void => {
     if (ingredient.type === 'bun' && ingredientsInUse.some((i) => i.type === 'bun')) {

@@ -74,11 +74,11 @@ export const BurgerIngredients = ({
         key={`ingredient_${ingredient.type}_${ingredient._id}`}
         className={`${styles.burger_ingredient_card} pl-4 pr-4`}
         style={{ gridRow: Math.floor(index / 2) }}
-        onClick={() => addIngredient(ingredient)}
         onContextMenuCapture={(e) => {
           e.preventDefault();
-          onOpenDetails(ingredient);
+          addIngredient(ingredient);
         }}
+        onClick={() => onOpenDetails(ingredient)}
       >
         <Counter
           count={ingredientsInUse.filter((ing) => ing._id === ingredient._id).length}
