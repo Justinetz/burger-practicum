@@ -6,16 +6,21 @@
   font-family: 'Jet Brains Mono', serif;
 }
 
+.burger_ingredients_flow {
+  padding-right: 20px;
+  padding-bottom: 20px;
+  overflow: hidden visible;
+}
+
 .burger_ingredients_list {
   display: grid;
   grid-template-columns: 1fr 1fr;
   width: 100%;
-  min-height: 300px;
-  margin-bottom: 20px;
-  overflow: hidden visible;
+  padding-bottom: 20px;
 }
 
 .burger_ingredient_card {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,6 +31,7 @@
 .burger_ingredient_price {
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 4px;
 }
 

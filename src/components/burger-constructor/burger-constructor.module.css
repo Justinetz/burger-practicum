@@ -5,3 +5,9 @@
   padding-bottom: 20px;
   color: var(--text-primary-color);
 }
+
+.burger_constructor_flow {
+  padding-right: 20px;
+  padding-bottom: 20px;
+  overflow: hidden visible;
+}

@@ -6,12 +6,20 @@ import styles from './burger-constructor.module.css';
 
 type TBurgerConstructorProps = {
   ingredients: TIngredient[];
+  removeIngredient: (ingredientIndex: number) => void;
 };
 
-type TBurgerOrder = {
-  top: { types: TIngredientType[]; suffix: string };
-  middle: { types: TIngredientType[]; suffix: string };
-  bottom: { types: TIngredientType[]; suffix: string };
+type TBurgerConfig = {
+  edgeType: TIngredientType;
+  middle: { types: TIngredientType[]; max: number };
+};
+
+const burgerConfig: TBurgerConfig = {
+  edgeType: 'bun',
+  middle: {
+    types: ['sauce', 'main'],
+    max: 10,
+  },
 };
 
 /**
@@ -19,66 +27,52 @@ type TBurgerOrder = {
  */
 export const BurgerConstructor = ({
   ingredients,
+  removeIngredient,
 }: TBurgerConstructorProps): React.JSX.Element => {
   console.log(ingredients);
 
-  const burgerOrders: TBurgerOrder = {
-    top: {
-      types: ['bun'],
-      suffix: 'верх',
-    },
-    middle: {
-      types: ['sauce', 'main'],
-      suffix: '',
-    },
-    bottom: {
-      types: ['bun'],
-      suffix: 'низ',
-    },
-  };
+  const chartIngredients = ingredients.map((ingr, index) => ({ ...ingr, index }));
+  const edgeItem = ingredients.find((i) => i.type === burgerConfig.edgeType);
 
   return (
     <section className={styles.burger_constructor}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        {burgerOrders.top.types.map((t) =>
-          ingredients
+      <div
+        className={styles.burger_constructor_flow}
+        style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
+      >
+        {edgeItem && (
+          <ConstructorElement
+            key={`${edgeItem._id}_top`}
+            type="top"
+            isLocked={true}
+            price={edgeItem.price}
+            text={`${edgeItem.name} (верх)`}
+            thumbnail={edgeItem.image}
+          />
+        )}
+
+        {burgerConfig.middle.types.map((t) =>
+          chartIngredients
             .filter((i) => i.type == t)
             .map((i) => (
               <ConstructorElement
-                key={`${t}_${i._id}`}
-                type="top"
-                isLocked={true}
+                key={`${t}_${i._id}_${i.index}`}
                 price={i.price}
-                text={i.name}
+                text={`${i.name}`}
                 thumbnail={i.image}
+                handleClose={() => removeIngredient(i.index)}
               />
             ))
         )}
-        {burgerOrders.middle.types.map((t) =>
-          ingredients
-            .filter((i) => i.type == t)
-            .map((i) => (
-              <ConstructorElement
-                key={`${t}_${i._id}`}
-                price={i.price}
-                text={i.name}
-                thumbnail={i.image}
-              />
-            ))
-        )}
-        {burgerOrders.bottom.types.map((t) =>
-          ingredients
-            .filter((i) => i.type == t)
-            .map((i) => (
-              <ConstructorElement
-                key={`${t}_${i._id}`}
-                type="bottom"
-                isLocked={true}
-                price={i.price}
-                text={i.name}
-                thumbnail={i.image}
-              />
-            ))
+        {edgeItem && (
+          <ConstructorElement
+            key={`${edgeItem._id}_bottom`}
+            type="top"
+            isLocked={true}
+            price={edgeItem.price}
+            text={`${edgeItem.name} (низ)`}
+            thumbnail={edgeItem.image}
+          />
         )}
       </div>
     </section>
