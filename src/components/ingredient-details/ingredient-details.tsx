@@ -1,33 +1,19 @@
 import { CloseIcon } from '@krgaa/react-developer-burger-ui-components';
-import { createPortal } from 'react-dom';
 
 import type { TIngredient } from '../../utils/types';
 import type { JSX } from 'react';
 
-import styles from './popup-ingredient-details.module.css';
+import styles from './ingredient-details.module.css';
 
-type TPopupIngredientDetalsProps = {
-  isOpen: boolean;
+type TIngredientDetailsProps = {
   ingredient: TIngredient | null;
   onClose: () => void;
 };
 
-export const PopupIngredientDetals = ({
-  isOpen,
+export const IngredientDetails = ({
   ingredient,
   onClose,
-}: TPopupIngredientDetalsProps): React.JSX.Element | null => {
-  if (!isOpen || !ingredient) {
-    return null;
-  }
-
-  const modalRoot = document.getElementById('underoot-modals');
-
-  if (!modalRoot) {
-    console.error("На странице потерялся элемент 'underoot-modals'.");
-    return null;
-  }
-
+}: TIngredientDetailsProps): React.JSX.Element | null => {
   const getCellContent = (title: string, value: number): JSX.Element => {
     return (
       <div className={styles.details_table_cell}>
@@ -37,7 +23,9 @@ export const PopupIngredientDetals = ({
     );
   };
 
-  return createPortal(
+  return ingredient == null ? (
+    <></>
+  ) : (
     <div className={styles.details_root}>
       <div className={styles.details_title}>
         <p className={`${styles.details_title_text} text text_type_main-large`}>
@@ -59,7 +47,6 @@ export const PopupIngredientDetals = ({
           {getCellContent('Углеводы, г', ingredient.carbohydrates)}
         </div>
       </div>
-    </div>,
-    modalRoot
+    </div>
   );
 };

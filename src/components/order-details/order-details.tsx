@@ -1,31 +1,17 @@
 import { CloseIcon } from '@krgaa/react-developer-burger-ui-components';
-import { createPortal } from 'react-dom';
 
 import acceptIcon from '../../images/order-accept.svg';
 
-import styles from './popup-order-accepted.module.css';
+import styles from './order-details.module.css';
 
-type TPopupOrderAcceptedProps = {
-  isOpen: boolean;
+type TOrderDetailsProps = {
   onClose: () => void;
 };
 
-export const PopupOrderAccepted = ({
-  isOpen,
+export const OrderDetails = ({
   onClose,
-}: TPopupOrderAcceptedProps): React.JSX.Element | null => {
-  if (!isOpen) {
-    return null;
-  }
-
-  const modalRoot = document.getElementById('underoot-modals');
-
-  if (!modalRoot) {
-    console.error("На странице потерялся элемент 'underoot-modals'.");
-    return null;
-  }
-
-  return createPortal(
+}: TOrderDetailsProps): React.JSX.Element | null => {
+  return (
     <div className={`${styles.order_root} p-10`}>
       <CloseIcon
         type="secondary"
@@ -47,7 +33,6 @@ export const PopupOrderAccepted = ({
       <p className="text text_type_main-default text_color_inactive pb-20">
         Дождитесь готовности на орбитальной станции
       </p>
-    </div>,
-    modalRoot
+    </div>
   );
 };

@@ -1,8 +1,9 @@
 import { Counter, CurrencyIcon, Tab } from '@krgaa/react-developer-burger-ui-components';
 import { useState } from 'react';
 
-import { PopupIngredientDetals } from '../popup-ingredient-details/popup-ingredient-details';
-import { PopupOverlay } from '../popup-overlay/popup-overlay';
+import { IngredientDetails } from '../ingredient-details/ingredient-details';
+import { ModalOverlay } from '../modal-overlay/modal-overlay';
+import { Modal } from '../modal/modal';
 
 import type { TIngredient, TIngredientType } from '@utils/types';
 import type { JSX } from 'react';
@@ -71,7 +72,7 @@ export const BurgerIngredients = ({
     return (
       <div
         key={`ingredient_${ingredient.type}_${ingredient._id}`}
-        className={styles.burger_ingredient_card}
+        className={`${styles.burger_ingredient_card} pl-4 pr-4`}
         style={{ gridRow: Math.floor(index / 2) }}
         onClick={() => addIngredient(ingredient)}
         onContextMenuCapture={(e) => {
@@ -85,7 +86,7 @@ export const BurgerIngredients = ({
           extraClass="m-1"
         />
         <img alt={ingredient.name} src={ingredient.image} />
-        <div className={styles.burger_ingredient_price}>
+        <div className={`${styles.burger_ingredient_price} pt-1 pb-1`}>
           <p className="text text_type_digits-default">{ingredient.price}</p>
           <CurrencyIcon className="p-1" type="primary" />
         </div>
@@ -116,10 +117,10 @@ export const BurgerIngredients = ({
           })}
         </ul>
       </nav>
-      <div className={styles.burger_ingredients_flow}>
+      <div className={`${styles.burger_ingredients_flow}`}>
         {tabs.map((tab) => {
           return (
-            <div key={`ingredients_flow_${tab.key}`}>
+            <div key={`ingredients_flow_${tab.key}`} className="pt-10">
               <p className="text text_type_main-medium p-2">{tab.name}</p>
               <div className={styles.burger_ingredients_list}>
                 {getIngredients(tab.key).map((item, index) =>
@@ -130,12 +131,10 @@ export const BurgerIngredients = ({
           );
         })}
       </div>
-      <PopupOverlay isOpen={isDetailsOpen} />
-      <PopupIngredientDetals
-        isOpen={isDetailsOpen}
-        ingredient={detailsItem}
-        onClose={onCloseDetails}
-      ></PopupIngredientDetals>
+      <ModalOverlay isOpen={isDetailsOpen} />
+      <Modal isOpen={isDetailsOpen}>
+        <IngredientDetails ingredient={detailsItem} onClose={onCloseDetails} />
+      </Modal>
     </section>
   );
 };

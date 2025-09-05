@@ -1,12 +1,12 @@
 import { createPortal } from 'react-dom';
 
-type TPopupOverlayProps = {
+type TModalOverlayProps = {
   isOpen: boolean;
 };
 
-export const PopupOverlay = ({
+export const ModalOverlay = ({
   isOpen,
-}: TPopupOverlayProps): React.JSX.Element | null => {
+}: TModalOverlayProps): React.JSX.Element | null => {
   if (!isOpen) {
     return null;
   }

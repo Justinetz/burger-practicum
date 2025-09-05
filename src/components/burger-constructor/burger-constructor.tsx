@@ -3,12 +3,12 @@ import {
   ConstructorElement,
   CurrencyIcon,
   DragIcon,
-  LockIcon,
 } from '@krgaa/react-developer-burger-ui-components';
 import { useState } from 'react';
 
-import { PopupOrderAccepted } from '../popup-order-accepted/popup-order-accepted';
-import { PopupOverlay } from '../popup-overlay/popup-overlay';
+import { ModalOverlay } from '../modal-overlay/modal-overlay';
+import { Modal } from '../modal/modal';
+import { OrderDetails } from '../order-details/order-details';
 
 import type { TIngredient, TIngredientType } from '@utils/types';
 
@@ -63,13 +63,9 @@ export const BurgerConstructor = ({
 
   return (
     <section className={styles.burger_constructor}>
-      <div
-        className={styles.burger_constructor_flow}
-        style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
-      >
+      <div className={styles.burger_constructor_flow}>
         {edgeItem && (
-          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <LockIcon type="disabled" className="p-1" />
+          <div className={`${styles.burger_ingredient_root} pl-8`}>
             <ConstructorElement
               key={`${edgeItem._id}_top`}
               type="top"
@@ -87,7 +83,7 @@ export const BurgerConstructor = ({
             .map((i) => (
               <div
                 key={`${t}_${i._id}_${i.index}`}
-                style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+                className={styles.burger_ingredient_root}
               >
                 <DragIcon type="secondary" className="p-1" />
                 <ConstructorElement
@@ -100,11 +96,10 @@ export const BurgerConstructor = ({
             ))
         )}
         {edgeItem && (
-          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <LockIcon type="disabled" className="p-1" />
+          <div className={`${styles.burger_ingredient_root} pl-8`}>
             <ConstructorElement
               key={`${edgeItem._id}_bottom`}
-              type="top"
+              type="bottom"
               isLocked={true}
               price={edgeItem.price}
               text={`${edgeItem.name} (низ)`}
@@ -113,26 +108,25 @@ export const BurgerConstructor = ({
           </div>
         )}
       </div>
-      <div className={`${styles.burger_constructor_total} p-4`}>
+      <div className={`${styles.burger_constructor_total} p-10`}>
         <span className="text text_type_digits-medium">{calcTotalPrice()}</span>
         <CurrencyIcon className="p-1" type="primary" />
         <Button
           htmlType={'button'}
           type="primary"
           size="medium"
-          style={{ marginLeft: 10 }}
+          style={{ marginLeft: 40 }}
           title="Оформить заказ"
-          disabled={cartIngredients.length === 0}
+          disabled={cartIngredients.length === 0 || !edgeItem}
           onClick={onOpenOrder}
         >
           Оформить заказ
         </Button>
       </div>
-      <PopupOverlay isOpen={isOrderOpen} />
-      <PopupOrderAccepted
-        isOpen={isOrderOpen}
-        onClose={onCloseOrder}
-      ></PopupOrderAccepted>
+      <ModalOverlay isOpen={isOrderOpen} />
+      <Modal isOpen={isOrderOpen}>
+        <OrderDetails onClose={onCloseOrder} />
+      </Modal>
     </section>
   );
 };
