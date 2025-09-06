@@ -14,7 +14,9 @@ export const IngredientDetails = ({
     return (
       <div className={styles.details_table_cell}>
         <span className="text text_type_main-default text_color_inactive">{title}</span>
-        <span className="text text_type_main-default text_color_inactive">{value}</span>
+        <span className="text text_type_digits-default text_color_inactive pt-2">
+          {value}
+        </span>
       </div>
     );
   };
@@ -22,21 +24,14 @@ export const IngredientDetails = ({
   return ingredient == null ? (
     <></>
   ) : (
-    <div>
-      <div className={styles.details_title}>
-        <p className={`${styles.details_title_text} text text_type_main-large`}>
-          Детали ингредиента
-        </p>
-      </div>
-      <div className={`${styles.details_card} p-4`}>
-        <img alt={ingredient.name} src={ingredient.image_large} />
-        <p className="text text_type_main-medium">{ingredient.name}</p>
-        <div className={styles.details_table}>
-          {getCellContent('Калории, ккал', ingredient.calories)}
-          {getCellContent('Белки, г', ingredient.proteins)}
-          {getCellContent('Жиры, г', ingredient.fat)}
-          {getCellContent('Углеводы, г', ingredient.carbohydrates)}
-        </div>
+    <div className={`${styles.details_card} p-4`}>
+      <img alt={ingredient.name} src={ingredient.image_large} />
+      <p className="text text_type_main-medium">{ingredient.name}</p>
+      <div className={styles.details_table}>
+        {getCellContent('Калории, ккал', ingredient.calories)}
+        {getCellContent('Белки, г', ingredient.proteins)}
+        {getCellContent('Жиры, г', ingredient.fat)}
+        {getCellContent('Углеводы, г', ingredient.carbohydrates)}
       </div>
     </div>
   );

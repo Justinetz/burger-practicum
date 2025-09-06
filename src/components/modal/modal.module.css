@@ -9,6 +9,12 @@
   transform: translate(-50%, -50%);
 }
 
+.modal_title {
+  width: 100%;
+  margin: 10px 0;
+  text-align: left;
+}
+
 .modal_close {
   position: absolute;
   top: 20px;

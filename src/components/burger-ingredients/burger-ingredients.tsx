@@ -126,7 +126,7 @@ export const BurgerIngredients = ({
         })}
       </div>
       {isModalOpen && (
-        <Modal onClose={onCloseDetails}>
+        <Modal title="Детали ингредиента" onClose={onCloseDetails}>
           <IngredientDetails ingredient={detailsItem} />
         </Modal>
       )}

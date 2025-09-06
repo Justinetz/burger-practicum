@@ -4,7 +4,7 @@ import styles from './order-details.module.css';
 
 export const OrderDetails = (): React.JSX.Element | null => {
   return (
-    <div className="p-10">
+    <div>
       <p
         className={`${styles.order_num} text text_type_digits-large pt-20 pb-8 pl-20 pr-20`}
       >
