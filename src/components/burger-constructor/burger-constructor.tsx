@@ -4,8 +4,8 @@ import {
   CurrencyIcon,
   DragIcon,
 } from '@krgaa/react-developer-burger-ui-components';
-import { useState } from 'react';
 
+import { useModal } from '../../hooks/use-modal';
 import { Modal } from '../modal/modal';
 import { OrderDetails } from '../order-details/order-details';
 
@@ -43,14 +43,14 @@ export const BurgerConstructor = ({
   const cartIngredients = ingredients.map((ingr, index) => ({ ...ingr, index }));
   const edgeItem = ingredients.find((i) => i.type === burgerConfig.edgeType);
 
-  const [isAcceptVisible, setIsAcceptVisible] = useState<boolean>(false);
+  const { isModalOpen, openModal, closeModal } = useModal();
 
   const onConfirmOrder = (): void => {
-    setIsAcceptVisible(true);
+    openModal();
   };
 
   const onCloseConfirmation = (): void => {
-    setIsAcceptVisible(false);
+    closeModal();
   };
 
   const calcTotalPrice = (): number => {
@@ -126,7 +126,7 @@ export const BurgerConstructor = ({
           Оформить заказ
         </Button>
       </div>
-      {isAcceptVisible && (
+      {isModalOpen && (
         <Modal onClose={onCloseConfirmation}>
           <OrderDetails />
         </Modal>

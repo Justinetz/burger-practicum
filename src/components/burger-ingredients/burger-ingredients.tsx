@@ -1,6 +1,7 @@
 import { Counter, CurrencyIcon, Tab } from '@krgaa/react-developer-burger-ui-components';
 import { useState } from 'react';
 
+import { useModal } from '../../hooks/use-modal';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Modal } from '../modal/modal';
 
@@ -52,16 +53,16 @@ export const BurgerIngredients = ({
   const [activeTab, setActiveTab] = useState<string>(tabs[0].key);
   const [detailsItem, setDetailsItem] = useState<TIngredient | null>(null);
 
-  const [isDetailsVisible, setIsDetailsVisible] = useState<boolean>(false);
+  const { isModalOpen, openModal, closeModal } = useModal();
 
   const onOpenDetails = (item: TIngredient): void => {
     setDetailsItem(item);
-    setIsDetailsVisible(true);
+    openModal();
   };
 
   const onCloseDetails = (): void => {
     setDetailsItem(null);
-    setIsDetailsVisible(false);
+    closeModal();
   };
 
   const getIngredientListCard = (ingredient: TIngredient): JSX.Element => {
@@ -124,7 +125,7 @@ export const BurgerIngredients = ({
           );
         })}
       </div>
-      {isDetailsVisible && (
+      {isModalOpen && (
         <Modal onClose={onCloseDetails}>
           <IngredientDetails ingredient={detailsItem} />
         </Modal>
