@@ -1,16 +1,26 @@
+import { CloseIcon } from '@krgaa/react-developer-burger-ui-components';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
+import { ModalOverlay } from '../modal-overlay/modal-overlay';
+
+import styles from './modal.module.css';
+
 type TModalProps = {
-  isOpen: boolean;
+  onClose: () => void;
 };
 
 export const Modal = ({
-  isOpen,
   children,
+  onClose,
 }: React.PropsWithChildren<TModalProps>): React.JSX.Element | null => {
-  if (!isOpen) {
-    return null;
-  }
+  useEffect(() => {
+    document.body.addEventListener('keydown', onClose);
+
+    return (): void => {
+      document.body.removeEventListener('keydown', onClose);
+    };
+  }, []);
 
   const modalRoot = document.getElementById('underoot-modals');
 
@@ -19,5 +29,16 @@ export const Modal = ({
     return null;
   }
 
-  return createPortal(children, modalRoot);
+  return createPortal(
+    <div className={`${styles.modal_root} p-10`}>
+      <CloseIcon
+        type="secondary"
+        className={`${styles.modal_close} pt-4`}
+        onClick={() => onClose()}
+      />
+      <ModalOverlay onClick={() => onClose()} />
+      {children}
+    </div>,
+    modalRoot
+  );
 };

@@ -1,0 +1,16 @@
+.modal_root {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  background-color: #191b1f;
+  border-width: 0;
+  border-radius: 25px;
+  transform: translate(-50%, -50%);
+}
+
+.modal_close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}

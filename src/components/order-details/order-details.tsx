@@ -1,23 +1,10 @@
-import { CloseIcon } from '@krgaa/react-developer-burger-ui-components';
-
 import acceptIcon from '../../images/order-accept.svg';
 
 import styles from './order-details.module.css';
 
-type TOrderDetailsProps = {
-  onClose: () => void;
-};
-
-export const OrderDetails = ({
-  onClose,
-}: TOrderDetailsProps): React.JSX.Element | null => {
+export const OrderDetails = (): React.JSX.Element | null => {
   return (
-    <div className={`${styles.order_root} p-10`}>
-      <CloseIcon
-        type="secondary"
-        className={`${styles.order_close} pt-4`}
-        onClick={onClose}
-      />
+    <div className="p-10">
       <p
         className={`${styles.order_num} text text_type_digits-large pt-20 pb-8 pl-20 pr-20`}
       >

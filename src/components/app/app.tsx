@@ -1,20 +1,38 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { AppHeader } from '@components/app-header/app-header';
 import { BurgerConstructor } from '@components/burger-constructor/burger-constructor';
 import { BurgerIngredients } from '@components/burger-ingredients/burger-ingredients';
-import { ingredients } from '@utils/ingredients';
+
+import { DataLoader } from '../../services/data-loader';
 
 import type { TIngredient } from '../../utils/types';
 
 import styles from './app.module.css';
 
+const dataLoader = new DataLoader();
+
 export const App = (): React.JSX.Element => {
-  // На первом этапе по умолчанию конструктор заполнен всем
-  const [ingredientsInUse, setIngredientsInUse] = useState<TIngredient[]>([
-    ...ingredients.filter((i) => i.type !== 'bun'),
-    ingredients.find((i) => i.type === 'bun')!,
-  ]);
+  const [ingredients, setIngredients] = useState<TIngredient[]>([]);
+  const [ingredientsInUse, setIngredientsInUse] = useState<TIngredient[]>([]);
+
+  const loadIngredients = (): void => {
+    const initializeWithData = (data: TIngredient[]): void => {
+      setIngredients(data);
+
+      // Пока заполняем и используемые
+      setIngredientsInUse([
+        ...data.filter((i: TIngredient) => i.type !== 'bun'),
+        data.find((i: TIngredient) => i.type === 'bun')!,
+      ]);
+    };
+
+    dataLoader.loadIngredients(initializeWithData);
+  };
+
+  useEffect(() => {
+    loadIngredients();
+  }, []);
 
   const addIngredientToChart = (ingredient: TIngredient): void => {
     if (ingredient.type === 'bun' && ingredientsInUse.some((i) => i.type === 'bun')) {

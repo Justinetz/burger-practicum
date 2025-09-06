@@ -1,5 +1,3 @@
-import { CloseIcon } from '@krgaa/react-developer-burger-ui-components';
-
 import type { TIngredient } from '../../utils/types';
 import type { JSX } from 'react';
 
@@ -7,12 +5,10 @@ import styles from './ingredient-details.module.css';
 
 type TIngredientDetailsProps = {
   ingredient: TIngredient | null;
-  onClose: () => void;
 };
 
 export const IngredientDetails = ({
   ingredient,
-  onClose,
 }: TIngredientDetailsProps): React.JSX.Element | null => {
   const getCellContent = (title: string, value: number): JSX.Element => {
     return (
@@ -26,16 +22,11 @@ export const IngredientDetails = ({
   return ingredient == null ? (
     <></>
   ) : (
-    <div className={styles.details_root}>
+    <div>
       <div className={styles.details_title}>
         <p className={`${styles.details_title_text} text text_type_main-large`}>
           Детали ингредиента
         </p>
-        <CloseIcon
-          type="secondary"
-          className={styles.details_title_button}
-          onClick={onClose}
-        />
       </div>
       <div className={`${styles.details_card} p-4`}>
         <img alt={ingredient.name} src={ingredient.image_large} />

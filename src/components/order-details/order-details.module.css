@@ -1,20 +1,3 @@
-.order_root {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  text-align: center;
-  background-color: #191b1f;
-  border-width: 0;
-  border-radius: 25px;
-  transform: translate(-50%, -50%);
-}
-
-.order_close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-}
-
 .order_ok {
   justify-self: center;
   width: 120px;

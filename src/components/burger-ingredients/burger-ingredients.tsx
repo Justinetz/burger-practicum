@@ -2,7 +2,6 @@ import { Counter, CurrencyIcon, Tab } from '@krgaa/react-developer-burger-ui-com
 import { useState } from 'react';
 
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
-import { ModalOverlay } from '../modal-overlay/modal-overlay';
 import { Modal } from '../modal/modal';
 
 import type { TIngredient, TIngredientType } from '@utils/types';
@@ -50,30 +49,26 @@ export const BurgerIngredients = ({
     return ingredients.filter((ing) => ing.type === tabKey);
   };
 
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-
   const [activeTab, setActiveTab] = useState<string>(tabs[0].key);
   const [detailsItem, setDetailsItem] = useState<TIngredient | null>(null);
 
+  const [isDetailsVisible, setIsDetailsVisible] = useState<boolean>(false);
+
   const onOpenDetails = (item: TIngredient): void => {
     setDetailsItem(item);
-    setIsDetailsOpen(true);
+    setIsDetailsVisible(true);
   };
 
   const onCloseDetails = (): void => {
     setDetailsItem(null);
-    setIsDetailsOpen(false);
+    setIsDetailsVisible(false);
   };
 
-  const getIngredientListCard = (
-    ingredient: TIngredient,
-    index: number
-  ): JSX.Element => {
+  const getIngredientListCard = (ingredient: TIngredient): JSX.Element => {
     return (
       <div
         key={`ingredient_${ingredient.type}_${ingredient._id}`}
         className={`${styles.burger_ingredient_card} pl-4 pr-4`}
-        style={{ gridRow: Math.floor(index / 2) }}
         onContextMenuCapture={(e) => {
           e.preventDefault();
           addIngredient(ingredient);
@@ -123,18 +118,17 @@ export const BurgerIngredients = ({
             <div key={`ingredients_flow_${tab.key}`} className="pt-10">
               <p className="text text_type_main-medium p-2">{tab.name}</p>
               <div className={styles.burger_ingredients_list}>
-                {getIngredients(tab.key).map((item, index) =>
-                  getIngredientListCard(item, index)
-                )}
+                {getIngredients(tab.key).map((item) => getIngredientListCard(item))}
               </div>
             </div>
           );
         })}
       </div>
-      <ModalOverlay isOpen={isDetailsOpen} />
-      <Modal isOpen={isDetailsOpen}>
-        <IngredientDetails ingredient={detailsItem} onClose={onCloseDetails} />
-      </Modal>
+      {isDetailsVisible && (
+        <Modal onClose={onCloseDetails}>
+          <IngredientDetails ingredient={detailsItem} />
+        </Modal>
+      )}
     </section>
   );
 };

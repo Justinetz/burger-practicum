@@ -1,16 +1,14 @@
 import { createPortal } from 'react-dom';
 
+import styles from './modal-overlay.module.css';
+
 type TModalOverlayProps = {
-  isOpen: boolean;
+  onClick: () => void;
 };
 
 export const ModalOverlay = ({
-  isOpen,
+  onClick,
 }: TModalOverlayProps): React.JSX.Element | null => {
-  if (!isOpen) {
-    return null;
-  }
-
   const modalRoot = document.getElementById('underoot-overlay');
 
   if (!modalRoot) {
@@ -19,16 +17,7 @@ export const ModalOverlay = ({
   }
 
   return createPortal(
-    <div
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        backgroundColor: ' rgba(0, 0, 0, 0.6)',
-      }}
-    ></div>,
+    <div className={styles.modal_overlay_root} onClick={onClick}></div>,
     modalRoot
   );
 };
