@@ -15,10 +15,16 @@ export const Modal = ({
   onClose,
 }: React.PropsWithChildren<TModalProps>): React.JSX.Element | null => {
   useEffect(() => {
-    document.body.addEventListener('keydown', onClose);
+    function checkEscapeAndClose(ev: KeyboardEvent): void {
+      if (ev.key === 'Escape') {
+        onClose();
+      }
+    }
+
+    document.body.addEventListener('keydown', checkEscapeAndClose);
 
     return (): void => {
-      document.body.removeEventListener('keydown', onClose);
+      document.body.removeEventListener('keydown', checkEscapeAndClose);
     };
   }, []);
 
