@@ -1,9 +1,4 @@
-import {
-  Button,
-  ConstructorElement,
-  CurrencyIcon,
-  DragIcon,
-} from '@krgaa/react-developer-burger-ui-components';
+import { Button, CurrencyIcon } from '@krgaa/react-developer-burger-ui-components';
 import { useDrop } from 'react-dnd';
 
 import { useAppDispatch } from '../../hooks/use-dispatch';
@@ -13,7 +8,6 @@ import {
   getBun,
   getMiddles,
   getTotalPrice,
-  unmarkIngredientInUse,
   markIngredientInUse,
 } from '../../services/reducers/ingredients-reducer';
 import {
@@ -24,9 +18,14 @@ import {
 import { dragDropKey } from '../../utils/constants';
 import { Modal } from '../modal/modal';
 import { OrderDetails } from '../order-details/order-details';
+import { ConstructorItem } from './constructor-item/constructor-item.tsx';
+import { DummyConstructorElement } from './dummy-item/dummy-constructor-element.tsx';
 
-import type { TIngredientCount } from '../../services/reducers/ingredients-reducer';
-import type { TIngredientType } from '../../utils/ingredient-types.ts';
+import type {
+  TIngredientCount,
+  TIngredientCountWithId,
+} from '../../services/reducers/ingredients-reducer';
+import type { TIngredient, TIngredientType } from '../../utils/ingredient-types.ts';
 
 import styles from './burger-constructor.module.css';
 
@@ -73,58 +72,69 @@ export const BurgerConstructor = (): React.JSX.Element => {
   };
 
   return (
-    <section
-      className={`${styles.burger_constructor} ${isHover ? styles.burger_constructor_hover : ''}`}
-      ref={dropTarget as any}
-    >
-      <div className={styles.burger_constructor_flow}>
+    <section className={styles.burger_constructor} ref={dropTarget as any}>
+      <div
+        className={`${styles.burger_constructor_flow} ${isHover ? styles.any_container_hover : ''}`}
+      >
         <div className={styles.burger_constructor_fixed}>
-          {bun && (
-            <div className={`${styles.burger_ingredient_root} pl-8`}>
-              <ConstructorElement
+          <div className="pl-8">
+            {bun ? (
+              <ConstructorItem
                 key={`${bun._id}_top`}
-                type="top"
-                isLocked={true}
-                price={bun.price}
-                text={`${bun.name} (верх)`}
-                thumbnail={bun.image}
+                item={{
+                  ...(bun as TIngredient & TIngredientCountWithId),
+                  burgerType: 'top',
+                }}
               />
-            </div>
-          )}
+            ) : (
+              <DummyConstructorElement
+                key={`dummy_bun_top`}
+                type="top"
+                text={`Выберите булки`}
+              />
+            )}
+          </div>
         </div>
         <div className={styles.burger_constructor_dynamic}>
-          {burgerConfig.middle.types.map((t) =>
-            middles
-              .filter((i) => i.type == t)
-              .map((i) => (
-                <div
-                  key={`${t}_${i._id}_${i.internalId}`}
-                  className={styles.burger_ingredient_root}
-                >
-                  <DragIcon type="secondary" className="p-1" />
-                  <ConstructorElement
-                    price={i.price}
-                    text={`${i.name}`}
-                    thumbnail={i.image}
-                    handleClose={() => unmarkIngredientInUse(i.internalId)}
+          {middles && middles.length > 0 ? (
+            burgerConfig.middle.types.map((t) =>
+              middles
+                .filter((i) => i.type == t)
+                .map((i) => (
+                  <ConstructorItem
+                    key={`${t}_${i._id}_${i.internalId}`}
+                    item={{ ...i, burgerType: 'middle' }}
                   />
-                </div>
-              ))
-          )}
-        </div>
-        <div className={styles.burger_constructor_fixed}>
-          {bun && (
-            <div className={`${styles.burger_ingredient_root} pl-8`}>
-              <ConstructorElement
-                key={`${bun._id}_bottom`}
-                type="bottom"
-                isLocked={true}
-                price={bun.price}
-                text={`${bun.name} (низ)`}
-                thumbnail={bun.image}
+                ))
+            )
+          ) : (
+            <div className="pl-8">
+              <DummyConstructorElement
+                key={`dummy_bun_middle`}
+                type="middle"
+                text={`Выберите начинку`}
               />
             </div>
           )}
+        </div>
+        <div className={styles.burger_constructor_fixed}>
+          <div className="pl-8">
+            {bun ? (
+              <ConstructorItem
+                key={`${bun._id}_bottom`}
+                item={{
+                  ...(bun as TIngredient & TIngredientCountWithId),
+                  burgerType: 'bottom',
+                }}
+              />
+            ) : (
+              <DummyConstructorElement
+                key={`dummy_bun_bottom`}
+                type="bottom"
+                text={`Выберите булки`}
+              />
+            )}
+          </div>
         </div>
       </div>
       <div className={`${styles.burger_constructor_total}`}>
