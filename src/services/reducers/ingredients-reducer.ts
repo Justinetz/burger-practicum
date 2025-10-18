@@ -1,9 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 
+import {
+  IngredientType,
+  type TIngredient,
+  type TIngredientResponse,
+} from '../../utils/ingredient-types.ts';
 import { loadIngredients } from '../remote-api-service';
 
-import type { TIngredient, TIngredientResponse } from '../../utils/ingredient-types.ts';
 import type { RootState } from '../store';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
@@ -91,10 +95,10 @@ export const ingredients = createSlice({
           return;
         }
 
-        if (ingredient.type === 'bun') {
+        if (ingredient.type === IngredientType.BUN) {
           state.constructor.bun = { id: action.payload.id, count: bunCount };
         } else {
-          const internalId = action.payload.internalId ?? uuidv4();
+          const internalId = action.payload.internalId ?? '';
           state.constructor.middles.push({
             id: action.payload.id,
             count: 1,
@@ -113,6 +117,12 @@ export const ingredients = createSlice({
         (item) => item.internalId !== action.payload
       );
       state.constructor.totalPrice = calcPrice(state);
+    },
+    // очистить используемые ингредиенты
+    resetIngredientsInUse: (state) => {
+      state.constructor.bun = initialState.constructor.bun;
+      state.constructor.middles = initialState.constructor.middles;
+      state.constructor.totalPrice = initialState.constructor.totalPrice;
     },
   },
   extraReducers: (builder) => {
@@ -172,7 +182,7 @@ export const getIngredientCount =
     const ingredient = state.ingredients.ingredients.find((i) => i._id === id);
     if (!ingredient) return 0;
 
-    if (ingredient.type === 'bun') {
+    if (ingredient.type === IngredientType.BUN) {
       const bun = state.ingredients.constructor.bun;
       return bun && bun.id === id ? bunCount : 0;
     }
@@ -186,6 +196,7 @@ const { actions, reducer } = ingredients;
 export const {
   markIngredientInUse,
   unmarkIngredientInUse,
+  resetIngredientsInUse,
   setDragging,
   swapIngredients,
 } = actions;

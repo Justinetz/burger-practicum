@@ -4,16 +4,15 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useModal } from '../../hooks/use-modal';
 import { useAppSelector } from '../../hooks/use-selector';
 import { getAllIngredients } from '../../services/reducers/ingredients-reducer';
+import { type TIngredient, IngredientType } from '../../utils/ingredient-types.ts';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Modal } from '../modal/modal';
 import { IngredientCard } from './ingredient-card/ingredient-card';
 
-import type { TIngredient, TIngredientType } from '../../utils/ingredient-types.ts';
-
 import styles from './burger-ingredients.module.css';
 
 type TBurgerIngredientsTab = {
-  key: TIngredientType;
+  key: IngredientType;
   name: string;
   index: number;
 };
@@ -25,17 +24,17 @@ enum TabIndexes {
 
 const tabs: TBurgerIngredientsTab[] = [
   {
-    key: 'bun',
+    key: IngredientType.BUN,
     name: 'Булки',
     index: TabIndexes.BUN,
   },
   {
-    key: 'sauce',
+    key: IngredientType.SAUCE,
     name: 'Соусы',
     index: TabIndexes.SAUCE,
   },
   {
-    key: 'main',
+    key: IngredientType.MAIN,
     name: 'Начинки',
     index: TabIndexes.MAIN,
   },
@@ -133,7 +132,7 @@ export const BurgerIngredients = (): React.JSX.Element => {
   const onTabClick = (value: string): void => {
     setActiveTab(value);
 
-    const tab = tabs.find((t) => t.key === value)!;
+    const tab = tabs.find((t) => String(t.key) === value)!;
     const scrollTo =
       initialIngredientsFlowHeights?.reduce((acc, item, curIndx) => {
         if (curIndx >= tab.index) {
@@ -145,7 +144,7 @@ export const BurgerIngredients = (): React.JSX.Element => {
     dataContainerRef.current?.scrollTo({ top: scrollTo });
   };
 
-  const getIngredientsByTab = (tabKey: TIngredientType): TIngredient[] => {
+  const getIngredientsByTab = (tabKey: IngredientType): TIngredient[] => {
     return ingredients.filter((ing) => ing.type === tabKey);
   };
 
@@ -158,7 +157,7 @@ export const BurgerIngredients = (): React.JSX.Element => {
               <Tab
                 key={`tab_${tab.key}`}
                 value={tab.key}
-                active={activeTab === tab.key}
+                active={activeTab === String(tab.key)}
                 onClick={onTabClick}
               >
                 {tab.name}

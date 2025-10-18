@@ -4,6 +4,10 @@
   align-items: center;
 }
 
+.middle_item_hover {
+  opacity: 0.5;
+}
+
 .middle_item_internal {
   width: 100%;
 }

@@ -55,8 +55,13 @@ export const order = createSlice({
 export const getOrderDetails = (state: RootState): TOrderDetails => {
   return state.order.details;
 };
+
 export const isOrderLoading = (state: RootState): boolean => {
   return state.order.detailsLoading;
+};
+
+export const isOrderFailed = (state: RootState): boolean => {
+  return state.order.detailsError === true;
 };
 
 const { reducer } = order;

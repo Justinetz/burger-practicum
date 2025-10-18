@@ -9,11 +9,13 @@ import {
   getMiddles,
   getTotalPrice,
   markIngredientInUse,
+  resetIngredientsInUse,
 } from '../../services/reducers/ingredients-reducer';
 import {
   fetchOrder,
   getOrderDetails,
   isOrderLoading,
+  isOrderFailed,
 } from '../../services/reducers/order-reducer';
 import { dragDropKey } from '../../utils/constants';
 import { Modal } from '../modal/modal';
@@ -21,26 +23,10 @@ import { OrderDetails } from '../order-details/order-details';
 import { ConstructorItem } from './constructor-item/constructor-item.tsx';
 import { DummyConstructorElement } from './dummy-item/dummy-constructor-element.tsx';
 
-import type {
-  TIngredientCount,
-  TIngredientCountWithId,
-} from '../../services/reducers/ingredients-reducer';
-import type { TIngredient, TIngredientType } from '../../utils/ingredient-types.ts';
+import type { TIngredientCountWithId } from '../../services/reducers/ingredients-reducer';
+import type { TIngredient } from '../../utils/ingredient-types.ts';
 
 import styles from './burger-constructor.module.css';
-
-type TBurgerConfig = {
-  edgeType: TIngredientType;
-  middle: { types: TIngredientType[]; max: number };
-};
-
-const burgerConfig: TBurgerConfig = {
-  edgeType: 'bun',
-  middle: {
-    types: ['sauce', 'main'],
-    max: 15,
-  },
-};
 
 /**
  * Tекущий состав бургера.
@@ -53,6 +39,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
   const totalPrice = useAppSelector(getTotalPrice);
   const orderDetails = useAppSelector(getOrderDetails);
   const isLoading = useAppSelector(isOrderLoading);
+  const isFailed = useAppSelector(isOrderFailed);
 
   const { isModalOpen, openModal, closeModal } = useModal();
 
@@ -62,13 +49,19 @@ export const BurgerConstructor = (): React.JSX.Element => {
       isHover: monitor.isOver(),
     }),
     drop(item: any) {
-      dispatch(markIngredientInUse((item as TIngredientCount).id));
+      dispatch(markIngredientInUse(item.id));
     },
   });
 
   const submitOrder = (): void => {
     const allIds = [bun, ...middles].map((ingredient) => ingredient!._id);
-    dispatch(fetchOrder(allIds)).then(() => openModal());
+    dispatch(fetchOrder(allIds)).then(() => {
+      if (!isLoading && !isFailed) {
+        dispatch(resetIngredientsInUse());
+      }
+
+      openModal();
+    });
   };
 
   return (
@@ -97,16 +90,12 @@ export const BurgerConstructor = (): React.JSX.Element => {
         </div>
         <div className={styles.burger_constructor_dynamic}>
           {middles && middles.length > 0 ? (
-            burgerConfig.middle.types.map((t) =>
-              middles
-                .filter((i) => i.type == t)
-                .map((i) => (
-                  <ConstructorItem
-                    key={`${t}_${i._id}_${i.internalId}`}
-                    item={{ ...i, burgerType: 'middle' }}
-                  />
-                ))
-            )
+            middles.map((i) => (
+              <ConstructorItem
+                key={`${i.type}_${i._id}_${i.internalId}`}
+                item={{ ...i, burgerType: 'middle' }}
+              />
+            ))
           ) : (
             <div className="pl-8">
               <DummyConstructorElement

@@ -11,9 +11,9 @@ import {
   swapIngredients,
   unmarkIngredientInUse,
 } from '../../../services/reducers/ingredients-reducer';
+import { IngredientType, type TIngredient } from '../../../utils/ingredient-types';
 
 import type { TIngredientCountWithId } from '../../../services/reducers/ingredients-reducer';
-import type { TIngredient } from '../../../utils/ingredient-types';
 
 import styles from './constructor-item.module.css';
 
@@ -27,7 +27,7 @@ export const ConstructorItem = (props: ConstructorItemProps) => {
 
   const dispatch = useAppDispatch();
 
-  const onDeleteClick = () => dispatch(unmarkIngredientInUse(item.internalId ?? ''));
+  const onDeleteClick = () => dispatch(unmarkIngredientInUse(item.internalId));
 
   const [{ opacity, isDragging }, ref] = useDrag({
     type: 'constructor-item',
@@ -51,19 +51,19 @@ export const ConstructorItem = (props: ConstructorItemProps) => {
 
   useEffect(() => {
     if (isDragging) {
-      dispatch(setDragging(item.internalId ?? ''));
+      dispatch(setDragging(item.internalId));
     }
   }, [isDragging]);
 
   useEffect(() => {
     if (isHover && (target as any).id !== item._id) {
-      dispatch(swapIngredients(item.internalId ?? ''));
+      dispatch(swapIngredients(item.internalId));
     }
   }, [isHover, target]);
 
   const burgerTypeSuffix = item.burgerType === 'top' ? '(верх)' : '(низ)';
 
-  return item.type === 'bun' ? (
+  return item.type === IngredientType.BUN ? (
     <div className={styles.middle_item_root}>
       <ConstructorElement
         key={`${item._id}_top`}
@@ -77,10 +77,10 @@ export const ConstructorItem = (props: ConstructorItemProps) => {
   ) : (
     <div
       key={`${item.type}_${item._id}_${item.internalId}`}
-      className={styles.middle_item_root}
+      className={`${styles.middle_item_root} ${isHover ? styles.middle_item_hover : ''}`}
       ref={ref as any}
     >
-      <DragIcon type="secondary" className="p-1" />
+      <DragIcon type="secondary" className="p-1 pr-2" />
       <div
         ref={dropTarget as any}
         className={styles.middle_item_internal}

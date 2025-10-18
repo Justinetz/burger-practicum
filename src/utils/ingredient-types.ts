@@ -1,11 +1,15 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-export type TIngredientType = 'bun' | 'main' | 'sauce';
+export enum IngredientType {
+  BUN = 'bun',
+  MAIN = 'main',
+  SAUCE = 'sauce',
+}
 
 export type TIngredient = {
   _id: string;
   name: string;
-  type: TIngredientType;
+  type: IngredientType;
   proteins: number;
   fat: number;
   carbohydrates: number;

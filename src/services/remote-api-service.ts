@@ -16,10 +16,21 @@ const proceedHttpResponse = (
   }
 };
 
+const callRemoteApi = async (
+  operationName: string,
+  api: string,
+  apiData?: RequestInit
+): Promise<any> => {
+  try {
+    const httpResp = await fetch(`${apiUrl}${api}`, apiData);
+    return await proceedHttpResponse(httpResp, operationName);
+  } catch (e) {
+    return await Promise.reject(buildError(operationName, e));
+  }
+};
+
 export const loadIngredients = (): Promise<any> => {
-  return fetch(`${apiUrl}ingredients`)
-    .then((httpResp: Response) => proceedHttpResponse(httpResp, 'загрузка ингредиентов'))
-    .catch((e: any) => Promise.reject(buildError('загрузка ингредиентов', e)));
+  return callRemoteApi('загрузка ингредиентов', 'ingredients');
 };
 
 export const sendOrder = (ingredientIds: string[]): Promise<any> => {
@@ -31,7 +42,5 @@ export const sendOrder = (ingredientIds: string[]): Promise<any> => {
     },
   };
 
-  return fetch(`${apiUrl}orders`, requestData)
-    .then((httpResp: Response) => proceedHttpResponse(httpResp, 'отправка заказа'))
-    .catch((e: any) => Promise.reject(buildError('отправка заказа', e)));
+  return callRemoteApi('отправка заказа', 'orders', requestData);
 };
