@@ -1,0 +1,24 @@
+.dummy_root {
+  align-content: center;
+  width: 536px;
+  height: 80px;
+  color: #f2f2f3;
+  font-weight: 400;
+  font-size: 16px;
+  font-family: 'Jet Brains Mono', 'Helvetica', 'Arial', sans-serif;
+  line-height: 24px;
+  text-align: center;
+  background-color: #1c1c21;
+}
+
+.top_root {
+  border-radius: 88px 88px 40px 40px;
+}
+
+.bottom_root {
+  border-radius: 40px 40px 88px 88px;
+}
+
+.middle_root {
+  border-radius: 88px;
+}

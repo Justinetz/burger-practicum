@@ -1,0 +1,17 @@
+.burger_ingredient_card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.burger_ingredient_price {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+}
+
+.burger_ingredient_name {
+  text-align: center;
+}

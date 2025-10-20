@@ -1,14 +1,19 @@
 import acceptIcon from '../../images/order-accept.svg';
 
+import type { TOrderDetails } from '../../utils/order-types';
+
 import styles from './order-details.module.css';
 
-export const OrderDetails = (): React.JSX.Element | null => {
+export const OrderDetails = (props: {
+  details: TOrderDetails;
+}): React.JSX.Element | null => {
+  const { details } = props;
   return (
     <div>
       <p
         className={`${styles.order_num} text text_type_digits-large pt-20 pb-8 pl-20 pr-20`}
       >
-        {Math.floor(Math.random() * 1000000)}
+        {details.order.number}
       </p>
       <p className="text text_type_main-medium">идентификатор заказа</p>
       <img

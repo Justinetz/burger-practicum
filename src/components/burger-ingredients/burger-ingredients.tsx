@@ -1,59 +1,123 @@
-import { Counter, CurrencyIcon, Tab } from '@krgaa/react-developer-burger-ui-components';
-import { useState } from 'react';
+import { Tab } from '@krgaa/react-developer-burger-ui-components';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useModal } from '../../hooks/use-modal';
+import { useAppSelector } from '../../hooks/use-selector';
+import { getAllIngredients } from '../../services/reducers/ingredients-reducer';
+import { type TIngredient, IngredientType } from '../../utils/ingredient-types.ts';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Modal } from '../modal/modal';
-
-import type { TIngredient, TIngredientType } from '@utils/types';
-import type { JSX } from 'react';
+import { IngredientCard } from './ingredient-card/ingredient-card';
 
 import styles from './burger-ingredients.module.css';
 
-type TBurgerIngredientsProps = {
-  ingredients: TIngredient[];
-  ingredientsInUse: TIngredient[];
-  addIngredient: (ingredient: TIngredient) => void;
-};
-
 type TBurgerIngredientsTab = {
-  key: TIngredientType;
+  key: IngredientType;
   name: string;
+  index: number;
 };
+enum TabIndexes {
+  BUN = 0,
+  SAUCE = 1,
+  MAIN = 2,
+}
+
+const tabs: TBurgerIngredientsTab[] = [
+  {
+    key: IngredientType.BUN,
+    name: 'Булки',
+    index: TabIndexes.BUN,
+  },
+  {
+    key: IngredientType.SAUCE,
+    name: 'Соусы',
+    index: TabIndexes.SAUCE,
+  },
+  {
+    key: IngredientType.MAIN,
+    name: 'Начинки',
+    index: TabIndexes.MAIN,
+  },
+];
+
+const minTopFlowOffset = 0;
+const flowTopOffset = 40;
+const defaultFlowScrolls = [0, 0, 0];
+const flowSectionClassName = 'ingredients_flow_item';
 
 /**
  * Список ингредиентов.
  */
-export const BurgerIngredients = ({
-  ingredients,
-  ingredientsInUse,
-  addIngredient,
-}: TBurgerIngredientsProps): React.JSX.Element => {
-  console.log(ingredients);
+export const BurgerIngredients = (): React.JSX.Element => {
+  const ingredients: TIngredient[] = useAppSelector(getAllIngredients);
 
-  const tabs: TBurgerIngredientsTab[] = [
-    {
-      key: 'bun',
-      name: 'Булки',
-    },
-    {
-      key: 'sauce',
-      name: 'Соусы',
-    },
-    {
-      key: 'main',
-      name: 'Начинки',
-    },
-  ];
+  const dataContainerRef = useRef<HTMLDivElement>(null);
+  const ingredientsFlowRef = useRef<any>(null);
+  const ingredientsFlowContentRef = useRef<any>(null);
 
-  const getIngredients = (tabKey: TIngredientType): TIngredient[] => {
-    return ingredients.filter((ing) => ing.type === tabKey);
-  };
+  const initialIngredientsFlowHeights = useMemo<number[]>(() => defaultFlowScrolls, []);
 
   const [activeTab, setActiveTab] = useState<string>(tabs[0].key);
   const [detailsItem, setDetailsItem] = useState<TIngredient | null>(null);
 
+  const [ingredientsFlowScroll, setIngredientsFlowScroll] = useState(defaultFlowScrolls);
+  const [topFlowOffset, setTopFlowOffset] = useState(0);
+
   const { isModalOpen, openModal, closeModal } = useModal();
+
+  useEffect(() => {
+    const flowSections = (ingredientsFlowContentRef.current ?? []) as HTMLDivElement[];
+    if (flowSections.length === tabs.length && initialIngredientsFlowHeights) {
+      initialIngredientsFlowHeights[TabIndexes.BUN] =
+        flowSections[TabIndexes.BUN].getBoundingClientRect()?.bottom ?? 0;
+      initialIngredientsFlowHeights[TabIndexes.SAUCE] =
+        flowSections[TabIndexes.SAUCE].getBoundingClientRect()?.bottom ?? 0;
+      initialIngredientsFlowHeights[TabIndexes.MAIN] =
+        flowSections[TabIndexes.MAIN].getBoundingClientRect()?.bottom ?? 0;
+    }
+  }, [ingredientsFlowContentRef]);
+
+  useEffect(() => {
+    setTopFlowOffset(dataContainerRef.current?.getBoundingClientRect().y ?? 0);
+
+    const headerElements = document.querySelectorAll(`.${flowSectionClassName}`);
+    ingredientsFlowRef.current = Array.from(headerElements);
+
+    setIngredientsFlowScroll(
+      ingredientsFlowRef.current?.map(
+        (elem: Element) => elem.getBoundingClientRect().y - topFlowOffset
+      ) ?? defaultFlowScrolls
+    );
+
+    const contentElements = document.querySelectorAll(
+      `.${styles.burger_ingredients_list}`
+    );
+    ingredientsFlowContentRef.current = Array.from(contentElements);
+
+    setIngredientsFlowScroll(
+      ingredientsFlowContentRef.current?.map(
+        (elem: Element) => elem.getBoundingClientRect().y - topFlowOffset
+      ) ?? defaultFlowScrolls
+    );
+  }, [topFlowOffset]);
+
+  useEffect(() => {
+    if (ingredientsFlowScroll[TabIndexes.MAIN] < minTopFlowOffset) {
+      setActiveTab(tabs.find((t) => t.index === Number(TabIndexes.MAIN))!.key);
+    } else if (ingredientsFlowScroll[TabIndexes.SAUCE] < minTopFlowOffset) {
+      setActiveTab(tabs.find((t) => t.index === Number(TabIndexes.SAUCE))!.key);
+    } else if (ingredientsFlowScroll[TabIndexes.BUN] <= minTopFlowOffset) {
+      setActiveTab(tabs.find((t) => t.index === Number(TabIndexes.BUN))!.key);
+    }
+  }, [ingredientsFlowScroll]);
+
+  const handleIngredientsFlowScroll = (): void => {
+    setIngredientsFlowScroll(
+      ingredientsFlowRef.current?.map(
+        (elem: Element) => elem.getBoundingClientRect().y - topFlowOffset
+      ) ?? [0, 0, 0]
+    );
+  };
 
   const onOpenDetails = (item: TIngredient): void => {
     setDetailsItem(item);
@@ -65,32 +129,23 @@ export const BurgerIngredients = ({
     closeModal();
   };
 
-  const getIngredientListCard = (ingredient: TIngredient): JSX.Element => {
-    return (
-      <div
-        key={`ingredient_${ingredient.type}_${ingredient._id}`}
-        className={`${styles.burger_ingredient_card} pl-4 pr-4`}
-        onContextMenuCapture={(e) => {
-          e.preventDefault();
-          addIngredient(ingredient);
-        }}
-        onClick={() => onOpenDetails(ingredient)}
-      >
-        <Counter
-          count={ingredientsInUse.filter((ing) => ing._id === ingredient._id).length}
-          size="default"
-          extraClass="m-1"
-        />
-        <img alt={ingredient.name} src={ingredient.image} />
-        <div className={`${styles.burger_ingredient_price} pt-1 pb-1`}>
-          <p className="text text_type_digits-default">{ingredient.price}</p>
-          <CurrencyIcon className="p-1" type="primary" />
-        </div>
-        <p className={`text text_type_main-default ${styles.burger_ingredient_name}`}>
-          {ingredient.name}
-        </p>
-      </div>
-    );
+  const onTabClick = (value: string): void => {
+    setActiveTab(value);
+
+    const tab = tabs.find((t) => String(t.key) === value)!;
+    const scrollTo =
+      initialIngredientsFlowHeights?.reduce((acc, item, curIndx) => {
+        if (curIndx >= tab.index) {
+          return acc;
+        }
+        return acc + item;
+      }, 0) +
+      flowTopOffset * tab.index;
+    dataContainerRef.current?.scrollTo({ top: scrollTo });
+  };
+
+  const getIngredientsByTab = (tabKey: IngredientType): TIngredient[] => {
+    return ingredients.filter((ing) => ing.type === tabKey);
   };
 
   return (
@@ -102,10 +157,8 @@ export const BurgerIngredients = ({
               <Tab
                 key={`tab_${tab.key}`}
                 value={tab.key}
-                active={activeTab === tab.key}
-                onClick={() => {
-                  setActiveTab(tab.key);
-                }}
+                active={activeTab === String(tab.key)}
+                onClick={onTabClick}
               >
                 {tab.name}
               </Tab>
@@ -113,13 +166,26 @@ export const BurgerIngredients = ({
           })}
         </ul>
       </nav>
-      <div className={`${styles.burger_ingredients_flow}`}>
+      <div
+        className={`${styles.burger_ingredients_flow}`}
+        onScroll={handleIngredientsFlowScroll}
+        ref={dataContainerRef}
+      >
         {tabs.map((tab) => {
           return (
-            <div key={`ingredients_flow_${tab.key}`} className="pt-10">
+            <div
+              key={`ingredients_flow_${tab.key}`}
+              className={`${flowSectionClassName} pt-10`}
+            >
               <p className="text text_type_main-medium p-2">{tab.name}</p>
               <div className={styles.burger_ingredients_list}>
-                {getIngredients(tab.key).map((item) => getIngredientListCard(item))}
+                {getIngredientsByTab(tab.key).map((item) => (
+                  <IngredientCard
+                    key={`ingredient_${item.type}_${item._id}`}
+                    ingredient={item}
+                    onClick={onOpenDetails}
+                  />
+                ))}
               </div>
             </div>
           );
@@ -127,7 +193,7 @@ export const BurgerIngredients = ({
       </div>
       {isModalOpen && (
         <Modal title="Детали ингредиента" onClose={onCloseDetails}>
-          <IngredientDetails ingredient={detailsItem} />
+          {detailsItem && <IngredientDetails ingredient={detailsItem} />}
         </Modal>
       )}
     </section>

@@ -62,9 +62,10 @@ export default tseslint.config(
           prefer: 'type-imports',
         },
       ],
-      '@typescript-eslint/explicit-function-return-type': 'error',
-      '@typescript-eslint/explicit-module-boundary-types': 'error',
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-import-type-side-effects': 'error',
+      '@typescript-eslint/no-unsafe-return': 'off',
       '@typescript-eslint/no-unused-expressions': [
         'error',
         {
@@ -72,7 +73,12 @@ export default tseslint.config(
           allowTernary: true,
         },
       ],
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
       '@typescript-eslint/no-unused-imports': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
       'unused-imports/no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',

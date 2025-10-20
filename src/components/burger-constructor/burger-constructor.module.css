@@ -49,8 +49,6 @@ section {
   margin-top: var(--button-panel-margin-top);
 }
 
-.burger_ingredient_root {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+.any_container_hover {
+  opacity: 0.5;
 }
