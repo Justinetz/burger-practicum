@@ -21,6 +21,10 @@ export type TIngredient = {
   __v: number;
 };
 
+export type TIngredientCount = { id: string; count: number };
+
+export type TIngredientCountWithId = TIngredientCount & { internalId: string };
+
 export type TIngredientResponse = PayloadAction<{
   success: boolean;
   data: TIngredient[];

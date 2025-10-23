@@ -10,10 +10,14 @@ import {
   setDragging,
   swapIngredients,
   unmarkIngredientInUse,
-} from '../../../services/reducers/ingredients-reducer';
-import { IngredientType, type TIngredient } from '../../../utils/ingredient-types';
+} from '../../../services/ingredient/ingredients-reducer';
+import { constructorDragDropKey } from '../../../utils/constants';
+import { IngredientType } from '../../../utils/ingredient-types';
 
-import type { TIngredientCountWithId } from '../../../services/reducers/ingredients-reducer';
+import type {
+  TIngredientCountWithId,
+  TIngredient,
+} from '../../../utils/ingredient-types';
 
 import styles from './constructor-item.module.css';
 
@@ -30,7 +34,7 @@ export const ConstructorItem = (props: ConstructorItemProps) => {
   const onDeleteClick = () => dispatch(unmarkIngredientInUse(item.internalId));
 
   const [{ opacity, isDragging }, ref] = useDrag({
-    type: 'constructor-item',
+    type: constructorDragDropKey,
     item: { id: item._id },
     collect: (monitor) => ({
       opacity: monitor.isDragging() ? 0.5 : 1,
@@ -39,7 +43,7 @@ export const ConstructorItem = (props: ConstructorItemProps) => {
   });
 
   const [{ isHover, target }, dropTarget] = useDrop({
-    accept: 'constructor-item',
+    accept: constructorDragDropKey,
     collect: (monitor) => ({
       isHover: monitor.isOver(),
       target: monitor.getItem(),
