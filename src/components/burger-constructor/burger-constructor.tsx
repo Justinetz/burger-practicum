@@ -5,26 +5,27 @@ import { useAppDispatch } from '../../hooks/use-dispatch';
 import { useModal } from '../../hooks/use-modal';
 import { useAppSelector } from '../../hooks/use-selector';
 import {
+  markIngredientInUse,
+  resetIngredientsInUse,
+} from '../../services/ingredient/ingredients-reducer';
+import {
   getBun,
   getMiddles,
   getTotalPrice,
-  markIngredientInUse,
-  resetIngredientsInUse,
-} from '../../services/reducers/ingredients-reducer';
+} from '../../services/ingredient/ingredients-selector';
+import { fetchOrder } from '../../services/order/order-reducer';
 import {
-  fetchOrder,
   getOrderDetails,
   isOrderLoading,
   isOrderFailed,
-} from '../../services/reducers/order-reducer';
-import { dragDropKey } from '../../utils/constants';
+} from '../../services/order/order-selector';
+import { ingredientDragDropKey } from '../../utils/constants';
 import { Modal } from '../modal/modal';
 import { OrderDetails } from '../order-details/order-details';
 import { ConstructorItem } from './constructor-item/constructor-item.tsx';
 import { DummyConstructorElement } from './dummy-item/dummy-constructor-element.tsx';
 
-import type { TIngredientCountWithId } from '../../services/reducers/ingredients-reducer';
-import type { TIngredient } from '../../utils/ingredient-types.ts';
+import type { TIngredient, TIngredientCountWithId } from '../../utils/ingredient-types';
 
 import styles from './burger-constructor.module.css';
 
@@ -44,7 +45,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
   const { isModalOpen, openModal, closeModal } = useModal();
 
   const [{ isHover }, dropTarget] = useDrop({
-    accept: dragDropKey,
+    accept: ingredientDragDropKey,
     collect: (monitor) => ({
       isHover: monitor.isOver(),
     }),

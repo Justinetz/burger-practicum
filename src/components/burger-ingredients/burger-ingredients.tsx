@@ -3,8 +3,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useModal } from '../../hooks/use-modal';
 import { useAppSelector } from '../../hooks/use-selector';
-import { getAllIngredients } from '../../services/reducers/ingredients-reducer';
-import { type TIngredient, IngredientType } from '../../utils/ingredient-types.ts';
+import { getAllIngredients } from '../../services/ingredient/ingredients-selector';
+import { type TIngredient, IngredientType } from '../../utils/ingredient-types';
 import { IngredientDetails } from '../ingredient-details/ingredient-details';
 import { Modal } from '../modal/modal';
 import { IngredientCard } from './ingredient-card/ingredient-card';

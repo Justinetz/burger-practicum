@@ -3,7 +3,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { sendOrder } from '../remote-api-service';
 
 import type { TOrderDetails, TOrderDetailsResponse } from '../../utils/order-types';
-import type { RootState } from '../store';
 
 type IOrderState = {
   details: TOrderDetails;
@@ -51,18 +50,6 @@ export const order = createSlice({
     });
   },
 });
-
-export const getOrderDetails = (state: RootState): TOrderDetails => {
-  return state.order.details;
-};
-
-export const isOrderLoading = (state: RootState): boolean => {
-  return state.order.detailsLoading;
-};
-
-export const isOrderFailed = (state: RootState): boolean => {
-  return state.order.detailsError === true;
-};
 
 const { reducer } = order;
 

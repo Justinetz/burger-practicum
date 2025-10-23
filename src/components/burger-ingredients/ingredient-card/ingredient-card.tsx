@@ -2,8 +2,8 @@ import { Counter, CurrencyIcon } from '@krgaa/react-developer-burger-ui-componen
 import { useDrag } from 'react-dnd';
 
 import { useAppSelector } from '../../../hooks/use-selector';
-import { getIngredientCount } from '../../../services/reducers/ingredients-reducer';
-import { dragDropKey } from '../../../utils/constants';
+import { getIngredientCount } from '../../../services/ingredient/ingredients-selector';
+import { ingredientDragDropKey } from '../../../utils/constants';
 
 import type { TIngredient } from '../../../utils/ingredient-types';
 import type { JSX } from 'react';
@@ -19,7 +19,7 @@ export const IngredientCard = (props: {
   const ingredientCount = useAppSelector(getIngredientCount(ingredient._id));
 
   const [, ref] = useDrag({
-    type: dragDropKey,
+    type: ingredientDragDropKey,
     item: { id: ingredient._id },
   });
 
