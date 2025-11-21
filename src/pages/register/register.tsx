@@ -1,39 +1,49 @@
 import { Input, PasswordInput } from '@krgaa/react-developer-burger-ui-components';
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Header, QuestionableLink, InputContainer, SubmitButton } from '../../controls';
 import { PageForm } from '../../forms/page-form';
 import { useAppDispatch } from '../../hooks/use-dispatch';
-import { login } from '../../services/user/user-reducer';
+import { register } from '../../services/user/user-reducer';
 import { appRoutes } from '../../utils/constants';
 
-export const LoginPage: React.FC = () => {
+export const RegisterPage: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
+  const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
   const handleSubmit = async (evt: React.SyntheticEvent) => {
     evt.preventDefault();
-
-    const res = await dispatch(login({ email, password }));
-
-    if (login.fulfilled.match(res)) {
-      navigate(from, { replace: true });
+    const data = { name, email, password };
+    const resultAction = await dispatch(register(data));
+    if (register.fulfilled.match(resultAction)) {
+      navigate(appRoutes.main, { replace: true });
     }
   };
-
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  // Надо запомнить, куда возвращаться
-  const from = location.state?.from?.pathname ?? appRoutes.main;
 
   return (
     <div>
       <PageForm onSubmit={handleSubmit}>
-        <Header>Вход</Header>
+        <Header>Регистрация</Header>
+
+        <InputContainer>
+          <Input
+            name="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            type="text"
+            placeholder="Имя"
+            error={false}
+            errorText="Ошибка"
+            onPointerEnter={undefined}
+            onPointerLeave={undefined}
+          />
+        </InputContainer>
+
         <InputContainer>
           <Input
             name="email"
@@ -47,15 +57,15 @@ export const LoginPage: React.FC = () => {
             onPointerLeave={undefined}
           />
         </InputContainer>
+
         <InputContainer>
           <PasswordInput name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </InputContainer>
-        <SubmitButton>Войти</SubmitButton>
-        <QuestionableLink redirectLink={appRoutes.register} title="Зарегистрироваться">
-          Вы новый пользователь?
-        </QuestionableLink>
-        <QuestionableLink redirectLink={appRoutes.forgotPassword} title="Восстановить пароль">
-          Забыли пароль?
+
+        <SubmitButton>Зарегистрироваться</SubmitButton>
+
+        <QuestionableLink redirectLink={appRoutes.login} title="Войти">
+          Уже зарегистрированы?
         </QuestionableLink>
       </PageForm>
     </div>

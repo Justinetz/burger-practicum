@@ -22,12 +22,9 @@ const initialState: IOrderState = {
   detailsError: false,
 };
 
-export const fetchOrder = createAsyncThunk(
-  'order/fetchOrder',
-  (ingredients: string[]) => {
-    return sendOrder(ingredients);
-  }
-);
+export const fetchOrder = createAsyncThunk('order/fetchOrder', (ingredients: string[]) => {
+  return sendOrder(ingredients);
+});
 
 export const order = createSlice({
   name: 'order',
@@ -37,14 +34,11 @@ export const order = createSlice({
     builder.addCase(fetchOrder.pending, (state) => {
       state.detailsLoading = true;
     });
-    builder.addCase<any>(
-      fetchOrder.fulfilled,
-      (state, action: TOrderDetailsResponse) => {
-        state.details = action.payload;
-        state.detailsLoading = false;
-        state.detailsError = false;
-      }
-    );
+    builder.addCase<any>(fetchOrder.fulfilled, (state, action: TOrderDetailsResponse) => {
+      state.details = action.payload;
+      state.detailsLoading = false;
+      state.detailsError = false;
+    });
     builder.addCase(fetchOrder.rejected, (state) => {
       state.detailsError = true;
     });

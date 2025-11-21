@@ -1,0 +1,52 @@
+.root {
+  display: flex;
+  max-width: 1280px;
+  margin: 120px auto 0;
+  padding: 0 40px;
+}
+
+.side_root {
+  max-width: 320px;
+}
+
+.side_tabs {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.text {
+  margin-top: 80px;
+}
+
+.link {
+  display: block;
+  color: #999;
+  font-size: 24px;
+  line-height: 30px;
+  text-decoration: none;
+}
+
+.link_active {
+  color: var(--text-primary, #f2f2f3);
+  font-weight: 700;
+}
+
+.button {
+  margin: 0;
+  background: transparent;
+  border: none;
+}
+
+.button:hover {
+  color: white;
+  cursor: pointer;
+}
+
+.info {
+  font-weight: 400;
+  font-size: 18px;
+  font-family: 'Jet Brains Mono', 'Helvetica', 'Arial', sans-serif;
+  line-height: 24px;
+  opacity: 0.4;
+}

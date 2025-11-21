@@ -1,0 +1,27 @@
+.header {
+  text-align: center;
+}
+
+.questionableText {
+  color: #8585ad;
+  font-family: 'Jet Brains Mono', 'Helvetica', 'Arial', sans-serif;
+  text-align: center;
+}
+
+.questionableLink {
+  color: #4c4cff;
+  text-decoration: none;
+}
+
+.inputContainer > div {
+  width: 100%;
+}
+
+.inputContainer > div > div {
+  width: 100%;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: center;
+}

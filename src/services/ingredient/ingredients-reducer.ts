@@ -21,6 +21,8 @@ type IIngredientsState = {
 
   dragging: string;
 
+  selectedId: string;
+
   constructor: {
     bun?: TIngredientCount;
     middles: TIngredientCountWithId[];
@@ -39,6 +41,7 @@ const initialState: IIngredientsState = {
     totalPrice: 0,
   },
   dragging: '',
+  selectedId: '',
 };
 
 const calcPrice = (state: IIngredientsState): number => {
@@ -56,10 +59,7 @@ const calcPrice = (state: IIngredientsState): number => {
   }, 0);
 };
 
-export const loadAllIngredients = createAsyncThunk(
-  'ingredients/loadAllIngredients',
-  loadIngredients
-);
+export const loadAllIngredients = createAsyncThunk('ingredients/loadAllIngredients', loadIngredients);
 
 export const ingredients = createSlice({
   name: 'ingredients',
@@ -71,12 +71,8 @@ export const ingredients = createSlice({
     },
     // Поменять местами
     swapIngredients: (state, action: PayloadAction<string>) => {
-      const dragIndex = [...state.constructor.middles].findIndex(
-        (ing) => ing.internalId === state.dragging
-      );
-      const hoverIndex = state.constructor.middles.findIndex(
-        (item) => item.internalId === action.payload
-      );
+      const dragIndex = [...state.constructor.middles].findIndex((ing) => ing.internalId === state.dragging);
+      const hoverIndex = state.constructor.middles.findIndex((item) => item.internalId === action.payload);
 
       if (dragIndex >= 0 && hoverIndex >= 0) {
         const temp = state.constructor.middles[dragIndex];
@@ -110,9 +106,7 @@ export const ingredients = createSlice({
     },
     // Удалить ингредиент
     unmarkIngredientInUse: (state, action: PayloadAction<string>) => {
-      state.constructor.middles = state.constructor.middles.filter(
-        (item) => item.internalId !== action.payload
-      );
+      state.constructor.middles = state.constructor.middles.filter((item) => item.internalId !== action.payload);
       state.constructor.totalPrice = calcPrice(state);
     },
     // очистить используемые ингредиенты
@@ -126,15 +120,12 @@ export const ingredients = createSlice({
     builder.addCase(loadAllIngredients.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase<any>(
-      loadAllIngredients.fulfilled,
-      (state, action: TIngredientResponse) => {
-        const { data } = action.payload;
-        state.ingredients = data;
-        state.loading = false;
-        state.error = false;
-      }
-    );
+    builder.addCase<any>(loadAllIngredients.fulfilled, (state, action: TIngredientResponse) => {
+      const { data } = action.payload;
+      state.ingredients = data;
+      state.loading = false;
+      state.error = false;
+    });
     builder.addCase(loadAllIngredients.rejected, (state) => {
       state.error = true;
     });
@@ -143,12 +134,7 @@ export const ingredients = createSlice({
 
 const { actions, reducer } = ingredients;
 
-export const {
-  markIngredientInUse,
-  unmarkIngredientInUse,
-  resetIngredientsInUse,
-  setDragging,
-  swapIngredients,
-} = actions;
+export const { markIngredientInUse, unmarkIngredientInUse, resetIngredientsInUse, setDragging, swapIngredients } =
+  actions;
 
 export default reducer;

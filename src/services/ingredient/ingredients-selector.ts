@@ -1,11 +1,7 @@
 import { bunCount } from '../../utils/constants';
 import { IngredientType } from '../../utils/ingredient-types';
 
-import type {
-  TIngredient,
-  TIngredientCount,
-  TIngredientCountWithId,
-} from '../../utils/ingredient-types';
+import type { TIngredient, TIngredientCount, TIngredientCountWithId } from '../../utils/ingredient-types';
 import type { RootState } from '../store';
 
 export const getAllIngredients = (state: RootState): TIngredient[] => {
@@ -13,21 +9,15 @@ export const getAllIngredients = (state: RootState): TIngredient[] => {
 };
 
 export const getBun = (state: RootState): (TIngredient & TIngredientCount) | null => {
-  const bun = state.ingredients.ingredients.find(
-    (i) => i._id === state.ingredients.constructor.bun?.id
-  );
+  const bun = state.ingredients.ingredients.find((i) => i._id === state.ingredients.constructor.bun?.id);
   if (!bun) return null;
 
   return { ...bun, count: 2 } as unknown as TIngredient & TIngredientCount;
 };
 
-export const getMiddles = (
-  state: RootState
-): (TIngredient & TIngredientCountWithId)[] => {
+export const getMiddles = (state: RootState): (TIngredient & TIngredientCountWithId)[] => {
   return state.ingredients.constructor.middles.map((main) => {
-    const foundIngredient = state.ingredients.ingredients.find(
-      (ingredient) => ingredient._id === main.id
-    )!;
+    const foundIngredient = state.ingredients.ingredients.find((ingredient) => ingredient._id === main.id)!;
     return {
       ...foundIngredient,
       count: main.count,
@@ -54,3 +44,11 @@ export const getIngredientCount =
     const main = state.ingredients.constructor.middles.filter((i) => i.id === id);
     return main ? main.length : 0;
   };
+
+export const getIngredientById = (id: string) => (state: RootState) => {
+  return state.ingredients.ingredients.find((i) => i._id === id);
+};
+
+export const isIngredientsLoading = (state: RootState) => {
+  return state.ingredients.loading;
+};

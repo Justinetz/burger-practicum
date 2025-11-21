@@ -6,9 +6,7 @@ type TModalOverlayProps = {
   onClick: () => void;
 };
 
-export const ModalOverlay = ({
-  onClick,
-}: TModalOverlayProps): React.JSX.Element | null => {
+export const ModalOverlay = ({ onClick }: TModalOverlayProps): React.JSX.Element | null => {
   const modalRoot = document.getElementById('underoot-overlay');
 
   if (!modalRoot) {
@@ -16,8 +14,5 @@ export const ModalOverlay = ({
     return null;
   }
 
-  return createPortal(
-    <div className={styles.modal_overlay_root} onClick={onClick}></div>,
-    modalRoot
-  );
+  return createPortal(<div className={styles.modal_overlay_root} onClick={onClick}></div>, modalRoot);
 };

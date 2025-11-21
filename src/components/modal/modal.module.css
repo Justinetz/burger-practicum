@@ -1,14 +1,21 @@
 .modal_root {
   position: fixed;
-  top: 50%;
-  left: 50%;
+  top: 25%;
+  left: 40%;
   text-align: center;
   background-color: #191b1f;
   border-width: 0;
   border-radius: 25px;
-  transform: translate(-50%, -50%);
-  animation-name: animatetop;
-  animation-duration: 0.4s;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 500ms,
+    visibility 300ms;
+}
+
+.modal_root_open {
+  visibility: visible;
+  opacity: 1;
 }
 
 .modal_title {

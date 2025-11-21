@@ -1,12 +1,9 @@
 import { Tab } from '@krgaa/react-developer-burger-ui-components';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { useModal } from '../../hooks/use-modal';
 import { useAppSelector } from '../../hooks/use-selector';
 import { getAllIngredients } from '../../services/ingredient/ingredients-selector';
 import { type TIngredient, IngredientType } from '../../utils/ingredient-types';
-import { IngredientDetails } from '../ingredient-details/ingredient-details';
-import { Modal } from '../modal/modal';
 import { IngredientCard } from './ingredient-card/ingredient-card';
 
 import styles from './burger-ingredients.module.css';
@@ -58,18 +55,14 @@ export const BurgerIngredients = (): React.JSX.Element => {
   const initialIngredientsFlowHeights = useMemo<number[]>(() => defaultFlowScrolls, []);
 
   const [activeTab, setActiveTab] = useState<string>(tabs[0].key);
-  const [detailsItem, setDetailsItem] = useState<TIngredient | null>(null);
 
   const [ingredientsFlowScroll, setIngredientsFlowScroll] = useState(defaultFlowScrolls);
   const [topFlowOffset, setTopFlowOffset] = useState(0);
 
-  const { isModalOpen, openModal, closeModal } = useModal();
-
   useEffect(() => {
     const flowSections = (ingredientsFlowContentRef.current ?? []) as HTMLDivElement[];
     if (flowSections.length === tabs.length && initialIngredientsFlowHeights) {
-      initialIngredientsFlowHeights[TabIndexes.BUN] =
-        flowSections[TabIndexes.BUN].getBoundingClientRect()?.bottom ?? 0;
+      initialIngredientsFlowHeights[TabIndexes.BUN] = flowSections[TabIndexes.BUN].getBoundingClientRect()?.bottom ?? 0;
       initialIngredientsFlowHeights[TabIndexes.SAUCE] =
         flowSections[TabIndexes.SAUCE].getBoundingClientRect()?.bottom ?? 0;
       initialIngredientsFlowHeights[TabIndexes.MAIN] =
@@ -84,20 +77,16 @@ export const BurgerIngredients = (): React.JSX.Element => {
     ingredientsFlowRef.current = Array.from(headerElements);
 
     setIngredientsFlowScroll(
-      ingredientsFlowRef.current?.map(
-        (elem: Element) => elem.getBoundingClientRect().y - topFlowOffset
-      ) ?? defaultFlowScrolls
+      ingredientsFlowRef.current?.map((elem: Element) => elem.getBoundingClientRect().y - topFlowOffset) ??
+        defaultFlowScrolls
     );
 
-    const contentElements = document.querySelectorAll(
-      `.${styles.burger_ingredients_list}`
-    );
+    const contentElements = document.querySelectorAll(`.${styles.burger_ingredients_list}`);
     ingredientsFlowContentRef.current = Array.from(contentElements);
 
     setIngredientsFlowScroll(
-      ingredientsFlowContentRef.current?.map(
-        (elem: Element) => elem.getBoundingClientRect().y - topFlowOffset
-      ) ?? defaultFlowScrolls
+      ingredientsFlowContentRef.current?.map((elem: Element) => elem.getBoundingClientRect().y - topFlowOffset) ??
+        defaultFlowScrolls
     );
   }, [topFlowOffset]);
 
@@ -113,20 +102,8 @@ export const BurgerIngredients = (): React.JSX.Element => {
 
   const handleIngredientsFlowScroll = (): void => {
     setIngredientsFlowScroll(
-      ingredientsFlowRef.current?.map(
-        (elem: Element) => elem.getBoundingClientRect().y - topFlowOffset
-      ) ?? [0, 0, 0]
+      ingredientsFlowRef.current?.map((elem: Element) => elem.getBoundingClientRect().y - topFlowOffset) ?? [0, 0, 0]
     );
-  };
-
-  const onOpenDetails = (item: TIngredient): void => {
-    setDetailsItem(item);
-    openModal();
-  };
-
-  const onCloseDetails = (): void => {
-    setDetailsItem(null);
-    closeModal();
   };
 
   const onTabClick = (value: string): void => {
@@ -150,16 +127,12 @@ export const BurgerIngredients = (): React.JSX.Element => {
 
   return (
     <section className={styles.burger_ingredients}>
+      <h1 className={`${styles.title} text text_type_main-large mt-10 mb-5 pl-5`}>Соберите бургер</h1>
       <nav>
         <ul className={styles.menu}>
           {tabs.map((tab) => {
             return (
-              <Tab
-                key={`tab_${tab.key}`}
-                value={tab.key}
-                active={activeTab === String(tab.key)}
-                onClick={onTabClick}
-              >
+              <Tab key={`tab_${tab.key}`} value={tab.key} active={activeTab === String(tab.key)} onClick={onTabClick}>
                 {tab.name}
               </Tab>
             );
@@ -173,29 +146,17 @@ export const BurgerIngredients = (): React.JSX.Element => {
       >
         {tabs.map((tab) => {
           return (
-            <div
-              key={`ingredients_flow_${tab.key}`}
-              className={`${flowSectionClassName} pt-10`}
-            >
+            <div key={`ingredients_flow_${tab.key}`} className={`${flowSectionClassName} pt-10`}>
               <p className="text text_type_main-medium p-2">{tab.name}</p>
               <div className={styles.burger_ingredients_list}>
                 {getIngredientsByTab(tab.key).map((item) => (
-                  <IngredientCard
-                    key={`ingredient_${item.type}_${item._id}`}
-                    ingredient={item}
-                    onClick={onOpenDetails}
-                  />
+                  <IngredientCard key={`ingredient_${item.type}_${item._id}`} ingredient={item} />
                 ))}
               </div>
             </div>
           );
         })}
       </div>
-      {isModalOpen && (
-        <Modal title="Детали ингредиента" onClose={onCloseDetails}>
-          {detailsItem && <IngredientDetails ingredient={detailsItem} />}
-        </Modal>
-      )}
     </section>
   );
 };
