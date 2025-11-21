@@ -1,25 +1,18 @@
-import {
-  ConstructorElement,
-  DragIcon,
-} from '@krgaa/react-developer-burger-ui-components';
+import { ConstructorElement, DragIcon } from '@krgaa/react-developer-burger-ui-components';
 import { useEffect } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 
 import { useAppDispatch } from '../../../hooks/use-dispatch';
-import {
-  setDragging,
-  swapIngredients,
-  unmarkIngredientInUse,
-} from '../../../services/reducers/ingredients-reducer';
-import { IngredientType, type TIngredient } from '../../../utils/ingredient-types';
+import { setDragging, swapIngredients, unmarkIngredientInUse } from '../../../services/ingredient/ingredients-reducer';
+import { constructorDragDropKey } from '../../../utils/constants';
+import { IngredientType } from '../../../utils/ingredient-types';
 
-import type { TIngredientCountWithId } from '../../../services/reducers/ingredients-reducer';
+import type { TIngredientCountWithId, TIngredient } from '../../../utils/ingredient-types';
 
 import styles from './constructor-item.module.css';
 
 export type ConstructorItemProps = {
-  item: TIngredient &
-    TIngredientCountWithId & { burgerType: 'top' | 'bottom' | 'middle' };
+  item: TIngredient & TIngredientCountWithId & { burgerType: 'top' | 'bottom' | 'middle' };
 };
 
 export const ConstructorItem = (props: ConstructorItemProps) => {
@@ -30,7 +23,7 @@ export const ConstructorItem = (props: ConstructorItemProps) => {
   const onDeleteClick = () => dispatch(unmarkIngredientInUse(item.internalId));
 
   const [{ opacity, isDragging }, ref] = useDrag({
-    type: 'constructor-item',
+    type: constructorDragDropKey,
     item: { id: item._id },
     collect: (monitor) => ({
       opacity: monitor.isDragging() ? 0.5 : 1,
@@ -39,7 +32,7 @@ export const ConstructorItem = (props: ConstructorItemProps) => {
   });
 
   const [{ isHover, target }, dropTarget] = useDrop({
-    accept: 'constructor-item',
+    accept: constructorDragDropKey,
     collect: (monitor) => ({
       isHover: monitor.isOver(),
       target: monitor.getItem(),
@@ -81,11 +74,7 @@ export const ConstructorItem = (props: ConstructorItemProps) => {
       ref={ref as any}
     >
       <DragIcon type="secondary" className="p-1 pr-2" />
-      <div
-        ref={dropTarget as any}
-        className={styles.middle_item_internal}
-        style={{ opacity }}
-      >
+      <div ref={dropTarget as any} className={styles.middle_item_internal} style={{ opacity }}>
         <ConstructorElement
           price={item.price}
           text={`${item.name}`}

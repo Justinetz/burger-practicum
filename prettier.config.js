@@ -2,7 +2,7 @@
 const config = {
   endOfLine: 'lf',
   jsxSingleQuote: false,
-  printWidth: 89,
+  printWidth: 120,
   semi: true,
   singleQuote: true,
   tabWidth: 2,

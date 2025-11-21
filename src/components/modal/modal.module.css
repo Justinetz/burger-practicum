@@ -2,13 +2,34 @@
   position: fixed;
   top: 50%;
   left: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 720px;
+  margin: 0;
+  padding: 0;
   text-align: center;
+  visibility: hidden;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  animation-name: animatetop;
+  animation-duration: 0.4s;
+}
+
+.modal_root_open {
+  visibility: visible;
+  opacity: 1;
+}
+
+.modal_content_wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
   background-color: #191b1f;
   border-width: 0;
   border-radius: 25px;
-  transform: translate(-50%, -50%);
-  animation-name: animatetop;
-  animation-duration: 0.4s;
 }
 
 .modal_title {
@@ -19,8 +40,16 @@
 
 .modal_close {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 60px;
+  right: 40px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.modal_close:hover {
+  opacity: 0.7;
 }
 
 @keyframes animatetop {

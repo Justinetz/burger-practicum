@@ -8,12 +8,14 @@ import styles from './modal.module.css';
 
 type TModalProps = {
   title?: string;
+  open: boolean;
   onClose: () => void;
 };
 
 export const Modal = ({
   children,
   title,
+  open,
   onClose,
 }: React.PropsWithChildren<TModalProps>): React.JSX.Element | null => {
   useEffect(() => {
@@ -38,17 +40,15 @@ export const Modal = ({
   }
 
   return createPortal(
-    <div className={`${styles.modal_root} p-10`}>
-      {title && (
-        <h2 className={`${styles.modal_title} text text_type_main-large`}>{title}</h2>
-      )}
-      <CloseIcon
-        type="secondary"
-        className={`${styles.modal_close} pt-4`}
-        onClick={() => onClose()}
-      />
+    <div className={`${styles.modal_root} p-10 ${open ? styles.modal_root_open : ''}`}>
       <ModalOverlay onClick={() => onClose()} />
-      {children}
+      <div className={styles.modal_content_wrapper}>
+        {title && <h2 className={`${styles.modal_title} text text_type_main-large`}>{title}</h2>}
+        <button className={`${styles.modal_close} pt-4`} onClick={() => onClose()}>
+          <CloseIcon type="secondary" />
+        </button>
+        {children}
+      </div>
     </div>,
     modalRoot
   );

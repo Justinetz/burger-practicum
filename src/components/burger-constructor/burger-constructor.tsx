@@ -1,30 +1,22 @@
 import { Button, CurrencyIcon } from '@krgaa/react-developer-burger-ui-components';
 import { useDrop } from 'react-dnd';
+import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch } from '../../hooks/use-dispatch';
 import { useModal } from '../../hooks/use-modal';
 import { useAppSelector } from '../../hooks/use-selector';
-import {
-  getBun,
-  getMiddles,
-  getTotalPrice,
-  markIngredientInUse,
-  resetIngredientsInUse,
-} from '../../services/reducers/ingredients-reducer';
-import {
-  fetchOrder,
-  getOrderDetails,
-  isOrderLoading,
-  isOrderFailed,
-} from '../../services/reducers/order-reducer';
-import { dragDropKey } from '../../utils/constants';
+import { markIngredientInUse, resetIngredientsInUse } from '../../services/ingredient/ingredients-reducer';
+import { getBun, getMiddles, getTotalPrice } from '../../services/ingredient/ingredients-selector';
+import { fetchOrder } from '../../services/order/order-reducer';
+import { getOrderDetails, isOrderLoading, isOrderFailed } from '../../services/order/order-selector';
+import { isAuthenticated } from '../../services/user/user-selector.ts';
+import { appRoutes, ingredientDragDropKey } from '../../utils/constants';
 import { Modal } from '../modal/modal';
 import { OrderDetails } from '../order-details/order-details';
 import { ConstructorItem } from './constructor-item/constructor-item.tsx';
 import { DummyConstructorElement } from './dummy-item/dummy-constructor-element.tsx';
 
-import type { TIngredientCountWithId } from '../../services/reducers/ingredients-reducer';
-import type { TIngredient } from '../../utils/ingredient-types.ts';
+import type { TIngredient, TIngredientCountWithId } from '../../utils/ingredient-types';
 
 import styles from './burger-constructor.module.css';
 
@@ -32,7 +24,10 @@ import styles from './burger-constructor.module.css';
  * Tекущий состав бургера.
  */
 export const BurgerConstructor = (): React.JSX.Element => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const isUserAuthenticated = useAppSelector(isAuthenticated);
 
   const bun = useAppSelector(getBun);
   const middles = useAppSelector(getMiddles);
@@ -44,7 +39,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
   const { isModalOpen, openModal, closeModal } = useModal();
 
   const [{ isHover }, dropTarget] = useDrop({
-    accept: dragDropKey,
+    accept: ingredientDragDropKey,
     collect: (monitor) => ({
       isHover: monitor.isOver(),
     }),
@@ -54,6 +49,11 @@ export const BurgerConstructor = (): React.JSX.Element => {
   });
 
   const submitOrder = (): void => {
+    if (!isUserAuthenticated) {
+      navigate(appRoutes.login);
+      return;
+    }
+
     const allIds = [bun, ...middles].map((ingredient) => ingredient!._id);
     dispatch(fetchOrder(allIds)).then(() => {
       if (!isLoading && !isFailed) {
@@ -65,10 +65,8 @@ export const BurgerConstructor = (): React.JSX.Element => {
   };
 
   return (
-    <section className={styles.burger_constructor} ref={dropTarget as any}>
-      <div
-        className={`${styles.burger_constructor_flow} ${isHover ? styles.any_container_hover : ''}`}
-      >
+    <section className={`${styles.burger_constructor} pt-10`} ref={dropTarget as any}>
+      <div className={`${styles.burger_constructor_flow} ${isHover ? styles.any_container_hover : ''}`}>
         <div className={styles.burger_constructor_fixed}>
           <div className="pl-8">
             {bun ? (
@@ -80,29 +78,18 @@ export const BurgerConstructor = (): React.JSX.Element => {
                 }}
               />
             ) : (
-              <DummyConstructorElement
-                key={`dummy_bun_top`}
-                type="top"
-                text={`Выберите булки`}
-              />
+              <DummyConstructorElement key={`dummy_bun_top`} type="top" text={`Выберите булки`} />
             )}
           </div>
         </div>
         <div className={styles.burger_constructor_dynamic}>
           {middles && middles.length > 0 ? (
             middles.map((i) => (
-              <ConstructorItem
-                key={`${i.type}_${i._id}_${i.internalId}`}
-                item={{ ...i, burgerType: 'middle' }}
-              />
+              <ConstructorItem key={`${i.type}_${i._id}_${i.internalId}`} item={{ ...i, burgerType: 'middle' }} />
             ))
           ) : (
             <div className="pl-8">
-              <DummyConstructorElement
-                key={`dummy_bun_middle`}
-                type="middle"
-                text={`Выберите начинку`}
-              />
+              <DummyConstructorElement key={`dummy_bun_middle`} type="middle" text={`Выберите начинку`} />
             </div>
           )}
         </div>
@@ -117,11 +104,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
                 }}
               />
             ) : (
-              <DummyConstructorElement
-                key={`dummy_bun_bottom`}
-                type="bottom"
-                text={`Выберите булки`}
-              />
+              <DummyConstructorElement key={`dummy_bun_bottom`} type="bottom" text={`Выберите булки`} />
             )}
           </div>
         </div>
@@ -141,7 +124,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
         </Button>
       </div>
       {isModalOpen && (
-        <Modal onClose={closeModal}>
+        <Modal open={isModalOpen} onClose={closeModal}>
           <OrderDetails details={orderDetails} />
         </Modal>
       )}

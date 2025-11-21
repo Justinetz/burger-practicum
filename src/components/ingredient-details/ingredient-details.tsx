@@ -1,28 +1,28 @@
-import type { TIngredient } from '../../utils/ingredient-types';
-import type { JSX } from 'react';
+import { useMemo, type JSX } from 'react';
+import { useParams } from 'react-router-dom';
+
+import { useAppSelector } from '../../hooks/use-selector';
+import { getAllIngredients } from '../../services/ingredient/ingredients-selector';
 
 import styles from './ingredient-details.module.css';
 
-type TIngredientDetailsProps = {
-  ingredient: TIngredient | null;
-};
+export const IngredientDetails = (): React.JSX.Element | null => {
+  const { id } = useParams<{ id: string }>();
+  const allIngredients = useAppSelector(getAllIngredients);
 
-export const IngredientDetails = ({
-  ingredient,
-}: TIngredientDetailsProps): React.JSX.Element | null => {
+  const ingredient = useMemo(() => allIngredients.find((i) => i._id === id), [allIngredients, id]);
+
   const getCellContent = (title: string, value: number): JSX.Element => {
     return (
       <div className={styles.details_table_cell}>
         <span className="text text_type_main-default text_color_inactive">{title}</span>
-        <span className="text text_type_digits-default text_color_inactive pt-2">
-          {value}
-        </span>
+        <span className="text text_type_digits-default text_color_inactive pt-2">{value}</span>
       </div>
     );
   };
 
-  return ingredient == null ? (
-    <></>
+  return !allIngredients.length || !ingredient ? (
+    <p className="text text_type_main-default p-10">Ингредиент не найден или еще не загружен</p>
   ) : (
     <div className={`${styles.details_card} p-4`}>
       <img alt={ingredient.name} src={ingredient.image_large} />
