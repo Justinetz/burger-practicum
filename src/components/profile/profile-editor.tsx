@@ -1,5 +1,5 @@
 import { Button, Input } from '@krgaa/react-developer-burger-ui-components';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { InputContainer } from '../../controls';
 import { useAppDispatch } from '../../hooks/use-dispatch';
@@ -7,18 +7,24 @@ import { useAppSelector } from '../../hooks/use-selector';
 import { patchUser } from '../../services/user/user-reducer';
 import { getSelf } from '../../services/user/user-selector';
 
+import type { TUser } from '../../utils/user-types';
 import type { JSX } from 'react';
 
 import styles from './profile-editor.module.css';
 
 export const ProfileEditor = (): JSX.Element => {
   const dispatch = useAppDispatch();
-  const user = useAppSelector(getSelf);
+  const user: TUser = useAppSelector(getSelf);
 
-  const [name, setName] = useState(user.name);
-  const [email, setEmail] = useState(user.email);
+  const [name, setName] = useState<string>(user.name);
+  const [email, setEmail] = useState<string>(user.email);
 
   const shouldShowButtons = useMemo(() => name !== user.name || email !== user.email, [user, name, email]);
+
+  useEffect(() => {
+    setName(user.name);
+    setEmail(user.email);
+  }, [user]);
 
   const handleSubmit = (evt: React.SyntheticEvent) => {
     evt.preventDefault();
@@ -77,7 +83,9 @@ export const ProfileEditor = (): JSX.Element => {
           <Button type="secondary" size="medium" onClick={handleReset} htmlType={'button'}>
             Отмена
           </Button>
-          <Button htmlType={'button'}>Сохранить</Button>
+          <Button type="primary" size="medium" htmlType={'submit'}>
+            Сохранить
+          </Button>
         </div>
       )}
     </form>

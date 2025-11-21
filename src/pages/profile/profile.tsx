@@ -22,31 +22,27 @@ export const ProfilePage: React.FC = () => {
         <aside className={`${styles.side_root} mr-15`}>
           <ul className={styles.side_tabs}>
             <li>
-              <NavLink
-                to={appRoutes.profile}
-                end
-                className={({ isActive }) =>
-                  `text text_type_main-medium pt-4 pb-4 ${styles.link} ${isActive ? styles.link_active : ''}`
-                }
-              >
-                Профиль
+              <NavLink to={appRoutes.profile} end>
+                {({ isActive }) => (
+                  <p className={`${styles.link_text} pb-2 ${styles.link} ${isActive ? styles.link_active : ''}`}>
+                    Профиль
+                  </p>
+                )}
               </NavLink>
             </li>
             <li>
-              <NavLink
-                to={appRoutes.profileOrders}
-                end
-                className={({ isActive }) =>
-                  `text text_type_main-medium pt-4 pb-4 ${styles.link} ${isActive ? styles.link_active : ''}`
-                }
-              >
-                История заказов
+              <NavLink to={appRoutes.profileOrders} end>
+                {({ isActive }) => (
+                  <p className={`${styles.link_text} pb-2 ${styles.link} ${isActive ? styles.link_active : ''}`}>
+                    История заказов
+                  </p>
+                )}
               </NavLink>
             </li>
             <li>
               <button
                 onClick={onLogout}
-                className={`${styles.button} text text_type_main-medium text_color_inactive pt-4 pb-4`}
+                className={`${styles.button} text text_type_main-medium text_color_inactive pb-4`}
               >
                 Выход
               </button>

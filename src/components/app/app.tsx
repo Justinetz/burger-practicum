@@ -55,7 +55,7 @@ export const App = (): React.JSX.Element => {
       }
     };
 
-    dispatch(loadAllIngredients()).catch((e: any) => console.error(e));
+    dispatch(loadAllIngredients());
 
     startWithAuth().catch((e: any) => console.error(e));
   }, [dispatch]);

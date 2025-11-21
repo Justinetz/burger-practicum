@@ -7,3 +7,8 @@
 .header {
   text-align: center;
 }
+
+.ingredients_container {
+  width: 640px;
+  height: 574px;
+}

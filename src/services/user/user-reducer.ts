@@ -162,42 +162,106 @@ export const user = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(refreshToken.pending, (state) => {
-      state.error = false;
-      state.loading = true;
-    });
-    builder.addCase(refreshToken.fulfilled, (state, action) => {
-      state.loading = false;
-      state.accessToken = action.payload.accessToken;
-      state.isAuthenticated = true;
-      state.authInitialized = true;
-    });
-    builder.addCase(refreshToken.rejected, (state) => {
-      state.loading = false;
-      state.error = true;
-      state.isAuthenticated = false;
-      state.authInitialized = true;
-    });
+    builder
+      .addCase(register.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(register.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
+      })
+      .addCase(register.fulfilled, (state, action) => {
+        state.loading = false;
+        state.accessToken = action.payload.accessToken;
+        state.user = action.payload.user;
+        state.isAuthenticated = true;
+        state.authInitialized = true;
+      });
+
+    builder
+      .addCase(refreshToken.pending, (state) => {
+        state.error = false;
+        state.loading = true;
+      })
+      .addCase(refreshToken.fulfilled, (state, action) => {
+        state.loading = false;
+        state.accessToken = action.payload.accessToken;
+        state.isAuthenticated = true;
+        state.authInitialized = true;
+      })
+      .addCase(refreshToken.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
+        state.isAuthenticated = false;
+        state.authInitialized = true;
+      });
 
     // Логин/логаут тоже должны выставлять флаг
-    builder.addCase(login.fulfilled, (state, action) => {
-      state.loading = false;
-      state.accessToken = action.payload.accessToken;
-      state.user = action.payload.user;
-      state.isAuthenticated = true;
-      state.authInitialized = true;
-    });
-    builder.addCase(register.fulfilled, (state, action) => {
-      state.loading = false;
-      state.accessToken = action.payload.accessToken;
-      state.user = action.payload.user;
-      state.isAuthenticated = true;
-      state.authInitialized = true;
-    });
-    builder.addCase(logout.fulfilled, () => ({
-      ...initialState,
-      authInitialized: true,
-    }));
+    builder
+      .addCase(login.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(login.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        state.loading = false;
+        state.accessToken = action.payload.accessToken;
+        state.user = action.payload.user;
+        state.isAuthenticated = true;
+        state.authInitialized = true;
+      });
+
+    builder
+      .addCase(logout.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(logout.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
+      })
+      .addCase(logout.fulfilled, () => ({
+        ...initialState,
+        authInitialized: true,
+      }));
+
+    builder
+      .addCase(getUser.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(getUser.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        if (action.payload) {
+          state.user = action.payload;
+        }
+      });
+
+    builder
+      .addCase(patchUser.pending, (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addCase(patchUser.rejected, (state) => {
+        state.loading = false;
+        state.error = true;
+      })
+      .addCase(patchUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = false;
+        if (action.payload) {
+          state.user = action.payload;
+        }
+      });
   },
 });
 

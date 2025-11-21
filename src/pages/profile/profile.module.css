@@ -15,8 +15,8 @@
   list-style: none;
 }
 
-.text {
-  margin-top: 80px;
+.link_text {
+  font-family: 'Jet Brains Mono', 'Helvetica', 'Arial', sans-serif;
 }
 
 .link {
@@ -24,6 +24,7 @@
   color: #999;
   font-size: 24px;
   line-height: 30px;
+  letter-spacing: 0%;
   text-decoration: none;
 }
 
@@ -45,8 +46,7 @@
 
 .info {
   font-weight: 400;
-  font-size: 18px;
-  font-family: 'Jet Brains Mono', 'Helvetica', 'Arial', sans-serif;
+  font-size: 16px;
   line-height: 24px;
   opacity: 0.4;
 }

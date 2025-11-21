@@ -24,6 +24,7 @@ export const appRoutes = {
   ingredientDetails: '/ingredients/:id',
   /** Страница ленты заказов пользователя */
   profileOrders: '/profile/orders',
+  feed: '/feed',
 
   builder: {
     ingredientDetails: (id: string) => `/ingredients/${id}`,

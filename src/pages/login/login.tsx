@@ -1,22 +1,25 @@
 import { Input, PasswordInput } from '@krgaa/react-developer-burger-ui-components';
-import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Header, QuestionableLink, InputContainer, SubmitButton } from '../../controls';
 import { PageForm } from '../../forms/page-form';
 import { useAppDispatch } from '../../hooks/use-dispatch';
+import { useForm } from '../../hooks/use-form';
 import { login } from '../../services/user/user-reducer';
 import { appRoutes } from '../../utils/constants';
+
+import type { IModel } from '../../hooks/use-form';
+import type React from 'react';
 
 export const LoginPage: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const { values, handleChange } = useForm({} as IModel);
 
   const handleSubmit = async (evt: React.SyntheticEvent) => {
     evt.preventDefault();
 
+    const { email, password } = values;
     const res = await dispatch(login({ email, password }));
 
     if (login.fulfilled.match(res)) {
@@ -37,8 +40,8 @@ export const LoginPage: React.FC = () => {
         <InputContainer>
           <Input
             name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={values.email}
+            onChange={handleChange}
             type="text"
             placeholder="E-mail"
             error={false}
@@ -48,7 +51,7 @@ export const LoginPage: React.FC = () => {
           />
         </InputContainer>
         <InputContainer>
-          <PasswordInput name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <PasswordInput name="password" value={values.password} onChange={handleChange} />
         </InputContainer>
         <SubmitButton>Войти</SubmitButton>
         <QuestionableLink redirectLink={appRoutes.register} title="Зарегистрироваться">
