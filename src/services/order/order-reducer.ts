@@ -3,7 +3,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { sendOrder } from '../remote-api-service';
 
 import type { TOrderDetails, TOrderDetailsResponse } from '../../utils/order-types';
-import type { RootState } from '../store';
 
 type IOrderState = {
   details: TOrderDetails;
@@ -23,12 +22,9 @@ const initialState: IOrderState = {
   detailsError: false,
 };
 
-export const fetchOrder = createAsyncThunk(
-  'order/fetchOrder',
-  (ingredients: string[]) => {
-    return sendOrder(ingredients);
-  }
-);
+export const fetchOrder = createAsyncThunk('order/fetchOrder', (ingredients: string[]) => {
+  return sendOrder(ingredients);
+});
 
 export const order = createSlice({
   name: 'order',
@@ -38,31 +34,17 @@ export const order = createSlice({
     builder.addCase(fetchOrder.pending, (state) => {
       state.detailsLoading = true;
     });
-    builder.addCase<any>(
-      fetchOrder.fulfilled,
-      (state, action: TOrderDetailsResponse) => {
-        state.details = action.payload;
-        state.detailsLoading = false;
-        state.detailsError = false;
-      }
-    );
+    builder.addCase<any>(fetchOrder.fulfilled, (state, action: TOrderDetailsResponse) => {
+      state.details = action.payload;
+      state.detailsLoading = false;
+      state.detailsError = false;
+    });
     builder.addCase(fetchOrder.rejected, (state) => {
+      state.detailsLoading = false;
       state.detailsError = true;
     });
   },
 });
-
-export const getOrderDetails = (state: RootState): TOrderDetails => {
-  return state.order.details;
-};
-
-export const isOrderLoading = (state: RootState): boolean => {
-  return state.order.detailsLoading;
-};
-
-export const isOrderFailed = (state: RootState): boolean => {
-  return state.order.detailsError === true;
-};
 
 const { reducer } = order;
 

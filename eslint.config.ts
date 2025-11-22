@@ -90,6 +90,9 @@ export default tseslint.config(
           varsIgnorePattern: '^_',
         },
       ],
+      '@typescript-eslint/no-floating-promises': 'off',
+      '@typescript-eslint/no-misused-promises': 'off',
+      '@typescript-eslint/no-empty-function': 'off',
       'import/no-unresolved': 'error',
       'import/no-unused-modules': 'error',
       'import/order': 'off',
@@ -114,7 +117,7 @@ export default tseslint.config(
             'side-effect-style',
             'style',
           ],
-                    internalPattern: [
+          internalPattern: [
             '^/',
             '^@components/',
             '^@contexts/',
@@ -136,7 +139,7 @@ export default tseslint.config(
       'react/prop-types': 'off',
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       'unused-imports/no-unused-imports': 'error',
-      'react-hooks/exhaustive-deps': 'off'
+      'react-hooks/exhaustive-deps': 'off',
     },
     settings: {
       react: {

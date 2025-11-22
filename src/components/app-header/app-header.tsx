@@ -1,9 +1,10 @@
-import {
-  BurgerIcon,
-  ListIcon,
-  Logo,
-  ProfileIcon,
-} from '@krgaa/react-developer-burger-ui-components';
+import { BurgerIcon, ListIcon, Logo, ProfileIcon } from '@krgaa/react-developer-burger-ui-components';
+import { NavLink } from 'react-router-dom';
+
+import { appRoutes } from '../../utils/constants';
+
+import type { JSX } from 'react';
+import type { To } from 'react-router-dom';
 
 import styles from './app-header.module.css';
 
@@ -11,27 +12,40 @@ import styles from './app-header.module.css';
  * Шапка приложения.
  */
 export const AppHeader = (): React.JSX.Element => {
+  const getLinkContent = (routeTo: To, text: string, getIcon: (isActive: boolean) => JSX.Element) => {
+    return (
+      <NavLink to={routeTo} end className={styles.link}>
+        {({ isActive }) => (
+          <div className={`${styles.link_content} ${isActive ? styles.link_content_active : ''}`}>
+            {getIcon(isActive)}
+            <p className="text text_type_main-default ml-2">{text}</p>
+          </div>
+        )}
+      </NavLink>
+    );
+  };
+
   return (
     <header className={styles.header}>
       <nav className={`${styles.menu} p-4`}>
-        <div className={styles.menu_part_left}>
-          {/* Тут должны быть ссылки, а не например кнопки или абзацы */}
-          <a href="/" className={`${styles.link} ${styles.link_active}`}>
-            <BurgerIcon type="primary" />
-            <p className="text text_type_main-default ml-2">Конструктор</p>
-          </a>
-          <a href="/feed" className={`${styles.link} ml-10`}>
-            <ListIcon type="secondary" />
-            <p className="text text_type_main-default ml-2">Лента заказов</p>
-          </a>
+        <div className={styles.link_container_left}>
+          {getLinkContent(appRoutes.main, 'Конструктор', (isActive: boolean) => (
+            <BurgerIcon type={isActive ? 'primary' : 'secondary'} />
+          ))}
+          {getLinkContent(appRoutes.feed, 'Лента заказов', (isActive: boolean) => (
+            <ListIcon type={isActive ? 'primary' : 'secondary'} />
+          ))}
         </div>
         <div className={styles.logo}>
-          <Logo />
+          <NavLink to={appRoutes.main} end>
+            <Logo />
+          </NavLink>
         </div>
-        <a href="/profile" className={`${styles.link} ${styles.link_position_last}`}>
-          <ProfileIcon type="secondary" />
-          <p className="text text_type_main-default ml-2">Личный кабинет</p>
-        </a>
+        <div className={styles.link_container_right}>
+          {getLinkContent(appRoutes.profile, 'Личный кабинет', (isActive: boolean) => (
+            <ProfileIcon type={isActive ? 'primary' : 'secondary'} />
+          ))}
+        </div>
       </nav>
     </header>
   );

@@ -1,0 +1,9 @@
+.root {
+  width: 100%;
+  max-width: 480px;
+}
+
+.button_panel {
+  display: flex;
+  justify-content: flex-end;
+}

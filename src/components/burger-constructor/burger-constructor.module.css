@@ -3,16 +3,13 @@ section {
   --button-panel-margin-top: 40px;
   --flow-panel-padding-bottom: 40px;
   --flow-panel-height-shorten: calc(
-    var(--button-panel-height) + var(--button-panel-margin-top) +
-      var(--flow-panel-padding-bottom)
+    var(--button-panel-height) + var(--button-panel-margin-top) + var(--flow-panel-padding-bottom)
   );
 }
 
 .burger_constructor {
   display: grid;
-  grid-template-rows: calc(100% - var(--flow-panel-height-shorten)) var(
-      --button-panel-height
-    );
+  grid-template-rows: calc(100% - var(--flow-panel-height-shorten)) var(--button-panel-height);
   box-sizing: border-box;
   max-width: 50%;
   height: -webkit-fill-available;

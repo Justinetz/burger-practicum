@@ -10,25 +10,33 @@
   margin: 0 auto;
 }
 
-.menu_part_left {
+.link_container_left {
   display: flex;
   flex-basis: 35%;
+  flex-direction: row;
+  justify-content: flex-start;
+  justify-content: space-evenly;
 }
 
 .link {
-  display: flex;
-  color: var(--text-inactive-color);
   text-decoration: none;
 }
 
-.link_active {
+.link_content {
+  display: flex;
+  color: var(--text-inactive-color);
+}
+
+.link_content_active {
   color: var(--text-primary-color);
 }
 
-.link_position_last {
+.link_container_right {
   display: flex;
   flex-basis: 35%;
+  flex-direction: row;
   justify-content: flex-end;
+  justify-content: space-evenly;
 }
 
 .logo {
