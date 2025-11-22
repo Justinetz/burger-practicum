@@ -18,7 +18,7 @@ export const RegisterPage: React.FC = () => {
 
   const { values, handleChange } = useForm({} as IModel);
 
-  const handleSubmit = async (evt: React.SyntheticEvent) => {
+  const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
     const { name, email, password } = values;
