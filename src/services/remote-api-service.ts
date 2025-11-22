@@ -17,9 +17,8 @@ export type TSendOrderResponseData = {
 } & TResponse;
 
 export type TUserResponseData = {
-  success: boolean;
   user: TUser;
-};
+} & TResponse;
 
 export type TRefreshTokenResponseData = {
   accessToken: string;
