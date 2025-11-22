@@ -1,8 +1,37 @@
-import { apiUrl } from '../utils/constants';
+import { apiUrl, jwtExpiredErrorText } from '../utils/constants';
 
+import type { TIngredient } from '../utils/ingredient-types';
 import type { TLoginUser, TRegisterUser, TUser } from '../utils/user-types';
 
-export const jwtExpiredErrorText = 'jwt expired';
+// #region Response Data
+
+type TResponse = { success: boolean };
+
+export type TIngredientsResponseData = { data: TIngredient[] } & TResponse;
+
+export type TSendOrderResponseData = {
+  name: string;
+  order: {
+    number: number;
+  };
+} & TResponse;
+
+export type TUserResponseData = {
+  success: boolean;
+  user: TUser;
+};
+
+export type TRefreshTokenResponseData = {
+  accessToken: string;
+  refreshToken: string;
+} & TResponse;
+
+export type TAuthResponseData = {
+  user: TUser;
+} & TRefreshTokenResponseData &
+  TResponse;
+
+//#endregion
 
 const postRequestData = {
   method: 'POST',
@@ -14,9 +43,9 @@ const postRequestData = {
 const buildError = (operationName: string, reason: any): Error =>
   new Error(`Операция "${operationName}" завершилась ошибкой: ${reason}`);
 
-const proceedHttpResponse = async (httpResp: Response, operationName: string): Promise<any> => {
+const proceedHttpResponse = async <T>(httpResp: Response, operationName: string): Promise<T> => {
   if (httpResp.ok) {
-    return httpResp.json();
+    return httpResp.json() as Promise<T>;
   } else {
     const data = await httpResp.json();
     if (data.message === jwtExpiredErrorText) {
@@ -27,52 +56,52 @@ const proceedHttpResponse = async (httpResp: Response, operationName: string): P
   }
 };
 
-const callRemoteApi = async (operationName: string, api: string, apiData?: RequestInit): Promise<any> => {
+const callRemoteApi = async <T>(operationName: string, api: string, apiData?: RequestInit): Promise<T> => {
   try {
     const httpResp = await fetch(`${apiUrl}${api}`, apiData);
-    return await proceedHttpResponse(httpResp, operationName);
+    return await proceedHttpResponse<T>(httpResp, operationName);
   } catch (e) {
     return await Promise.reject(buildError(operationName, e));
   }
 };
 
 /** Загрузить все возможные ингредиенты */
-export const loadIngredients = (): Promise<any> => {
-  return callRemoteApi('загрузка ингредиентов', 'ingredients');
+export const loadIngredients = (): Promise<TIngredientsResponseData> => {
+  return callRemoteApi<TIngredientsResponseData>('загрузка ингредиентов', 'ingredients');
 };
 
 /** Отправить заказ на сборку */
-export const sendOrder = (ingredientIds: string[]): Promise<any> => {
+export const sendOrder = (ingredientIds: string[]): Promise<TSendOrderResponseData> => {
   const requestData = {
     ...postRequestData,
     body: JSON.stringify({ ingredients: ingredientIds }),
   };
 
-  return callRemoteApi('отправка заказа', 'orders', requestData);
+  return callRemoteApi<TSendOrderResponseData>('отправка заказа', 'orders', requestData);
 };
 
 /** Регистрация нового пользователя */
-export const register = (data: TRegisterUser) => {
+export const register = (data: TRegisterUser): Promise<TAuthResponseData> => {
   const requestData = {
     ...postRequestData,
     body: JSON.stringify(data),
   };
 
-  return callRemoteApi('регистрация', 'auth/register', requestData);
+  return callRemoteApi<TAuthResponseData>('регистрация', 'auth/register', requestData);
 };
 
 /** Логин зарегистированного пользователя */
-export const login = (data: TLoginUser) => {
+export const login = (data: TLoginUser): Promise<TAuthResponseData> => {
   const requestData = {
     ...postRequestData,
     body: JSON.stringify(data),
   };
 
-  return callRemoteApi('АУФ', 'auth/login', requestData);
+  return callRemoteApi<TAuthResponseData>('АУФ', 'auth/login', requestData);
 };
 
 /** Получение информации о себе авторизованного пользователя */
-export const getUser = (accessToken: string) => {
+export const getUser = (accessToken: string): Promise<TUserResponseData> => {
   const requestData = {
     headers: {
       'Content-Type': 'application/json',
@@ -80,11 +109,11 @@ export const getUser = (accessToken: string) => {
     },
   };
 
-  return callRemoteApi('получение информации о пользователе', 'auth/user', requestData);
+  return callRemoteApi<TUserResponseData>('получение информации о пользователе', 'auth/user', requestData);
 };
 
 /** Обновление информации о себе авторизованного пользователя */
-export const patchUser = (accessToken: string, data: TUser) => {
+export const patchUser = (accessToken: string, data: TUser): Promise<TUserResponseData> => {
   const requestData = {
     method: 'PATCH',
     headers: {
@@ -94,21 +123,21 @@ export const patchUser = (accessToken: string, data: TUser) => {
     body: JSON.stringify(data),
   };
 
-  return callRemoteApi('обновление информации о пользователе', 'auth/user', requestData);
+  return callRemoteApi<TUserResponseData>('обновление информации о пользователе', 'auth/user', requestData);
 };
 
 /** Обновление токена авторизованного пользователя */
-export const refreshToken = (refreshToken: string) => {
+export const refreshToken = (refreshToken: string): Promise<TRefreshTokenResponseData> => {
   const requestData = {
     ...postRequestData,
     body: JSON.stringify({ token: refreshToken }),
   };
 
-  return callRemoteApi('обновление токена', 'auth/token', requestData);
+  return callRemoteApi<TRefreshTokenResponseData>('обновление токена', 'auth/token', requestData);
 };
 
 /** Выход авторизованного пользователя */
-export const logout = (refreshToken: string) => {
+export const logout = (refreshToken: string): Promise<any> => {
   const requestData = {
     ...postRequestData,
     body: JSON.stringify({ token: refreshToken }),
@@ -118,7 +147,7 @@ export const logout = (refreshToken: string) => {
 };
 
 /** Восстановление забытого пароля */
-export const forgotPassword = (email: string) => {
+export const forgotPassword = (email: string): Promise<any> => {
   const requestData = {
     ...postRequestData,
     body: JSON.stringify({ email }),
@@ -128,7 +157,7 @@ export const forgotPassword = (email: string) => {
 };
 
 /** Сброс пароля */
-export const resetPassword = (data: { password: string; token: string }) => {
+export const resetPassword = (data: { password: string; token: string }): Promise<any> => {
   const requestData = {
     ...postRequestData,
     body: JSON.stringify(data),

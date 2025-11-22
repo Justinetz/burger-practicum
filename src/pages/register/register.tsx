@@ -1,25 +1,28 @@
 import { Input, PasswordInput } from '@krgaa/react-developer-burger-ui-components';
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Header, QuestionableLink, InputContainer, SubmitButton } from '../../controls';
 import { PageForm } from '../../forms/page-form';
 import { useAppDispatch } from '../../hooks/use-dispatch';
+import { useForm } from '../../hooks/use-form';
 import { register } from '../../services/user/user-reducer';
 import { appRoutes } from '../../utils/constants';
+
+import type { IModel } from '../../hooks/use-form';
+import type { TRegisterUser } from '../../utils/user-types';
+import type React from 'react';
 
 export const RegisterPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const [name, setName] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const { values, handleChange } = useForm({} as IModel);
 
   const handleSubmit = async (evt: React.SyntheticEvent) => {
     evt.preventDefault();
-    const data = { name, email, password };
-    const resultAction = await dispatch(register(data));
+
+    const { name, email, password } = values;
+    const resultAction = await dispatch(register({ name, email, password } as TRegisterUser));
     if (register.fulfilled.match(resultAction)) {
       navigate(appRoutes.main, { replace: true });
     }
@@ -33,8 +36,8 @@ export const RegisterPage: React.FC = () => {
         <InputContainer>
           <Input
             name="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={values.name}
+            onChange={handleChange}
             type="text"
             placeholder="Имя"
             error={false}
@@ -47,8 +50,8 @@ export const RegisterPage: React.FC = () => {
         <InputContainer>
           <Input
             name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={values.email}
+            onChange={handleChange}
             type="text"
             placeholder="E-mail"
             error={false}
@@ -59,7 +62,7 @@ export const RegisterPage: React.FC = () => {
         </InputContainer>
 
         <InputContainer>
-          <PasswordInput name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <PasswordInput name="password" value={values.password} onChange={handleChange} />
         </InputContainer>
 
         <SubmitButton>Зарегистрироваться</SubmitButton>

@@ -2,6 +2,8 @@
 
 export const apiUrl = 'https://norma.education-services.ru/api/';
 
+export const jwtExpiredErrorText = 'jwt expired';
+
 //#endregion
 
 //#region Internal Behaviour
