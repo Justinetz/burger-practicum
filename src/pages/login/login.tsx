@@ -9,6 +9,7 @@ import { login } from '../../services/user/user-reducer';
 import { appRoutes } from '../../utils/constants';
 
 import type { IModel } from '../../hooks/use-form';
+import type { TLoginUser } from '../../utils/user-types';
 import type React from 'react';
 
 export const LoginPage: React.FC = () => {
@@ -16,11 +17,11 @@ export const LoginPage: React.FC = () => {
 
   const { values, handleChange } = useForm({} as IModel);
 
-  const handleSubmit = async (evt: React.SyntheticEvent) => {
+  const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
     const { email, password } = values;
-    const res = await dispatch(login({ email, password }));
+    const res = await dispatch(login({ email, password } as TLoginUser));
 
     if (login.fulfilled.match(res)) {
       navigate(from, { replace: true });

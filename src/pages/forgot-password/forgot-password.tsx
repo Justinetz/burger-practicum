@@ -14,7 +14,7 @@ export const ForgotPasswordPage: React.FC = () => {
 
   const [email, setEmail] = React.useState('');
 
-  const handleSubmit = async (evt: React.SyntheticEvent) => {
+  const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     const resultAction = await dispatch(forgotPassword(email));
     if (forgotPassword.fulfilled.match(resultAction)) {

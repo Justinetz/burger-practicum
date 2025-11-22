@@ -26,7 +26,7 @@ export const ProfileEditor = (): JSX.Element => {
     setEmail(user.email);
   }, [user]);
 
-  const handleSubmit = (evt: React.SyntheticEvent) => {
+  const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     dispatch(patchUser({ name, email }));
   };

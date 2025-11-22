@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
+import { jwtExpiredErrorText } from '../../utils/constants';
 import * as remoteApi from '../remote-api-service';
-import { jwtExpiredErrorText } from '../remote-api-service';
 
-import type { TUser } from '../../utils/user-types';
+import type { TRegisterUser, TUser } from '../../utils/user-types';
+import type { TRefreshTokenResponseData } from '../remote-api-service';
 import type { AppDispatch, RootState } from '../store';
 
 type IUserState = {
@@ -57,7 +58,7 @@ const validateRefreshToken = (refreshToken: any): { result: boolean; error?: Err
   return { result: true };
 };
 
-export const register = createAsyncThunk('user/register', (data: { name: string; email: string; password: string }) => {
+export const register = createAsyncThunk('user/register', (data: TRegisterUser) => {
   return remoteApi
     .register(data)
     .then((data) => {
@@ -78,7 +79,7 @@ export const login = createAsyncThunk('user/login', (data: { email: string; pass
   });
 });
 
-export const refreshToken = createAsyncThunk('user/refresh-token', () => {
+export const refreshToken = createAsyncThunk<TRefreshTokenResponseData>('user/refresh-token', () => {
   const refreshToken = getRefreshToken();
 
   const validationResult = validateRefreshToken(refreshToken);
@@ -110,7 +111,7 @@ export const forgotPassword = createAsyncThunk('user/forgot-password', (email: s
   return remoteApi.forgotPassword(email);
 });
 
-export const getUser = createAsyncThunk<TUser, void, { state: RootState; dispatch: AppDispatch }>(
+export const getUser = createAsyncThunk<TUser | void, void, { state: RootState; dispatch: AppDispatch }>(
   'user/get-user',
   (_, api) => {
     const { accessToken } = api.getState().user;
@@ -129,7 +130,7 @@ export const getUser = createAsyncThunk<TUser, void, { state: RootState; dispatc
   }
 );
 
-export const patchUser = createAsyncThunk<TUser, TUser, { state: RootState; dispatch: AppDispatch }>(
+export const patchUser = createAsyncThunk<TUser | void, TUser, { state: RootState; dispatch: AppDispatch }>(
   'user/patch-user',
   async (data, api) => {
     const { accessToken } = api.getState().user;
