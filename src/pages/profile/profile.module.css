@@ -15,20 +15,20 @@
   list-style: none;
 }
 
-.link_text {
-  font-family: 'Jet Brains Mono', 'Helvetica', 'Arial', sans-serif;
-}
-
 .link {
   display: block;
-  color: #999;
-  font-size: 24px;
-  line-height: 30px;
-  letter-spacing: 0%;
   text-decoration: none;
 }
 
-.link_active {
+.link_text {
+  color: #999;
+  font-size: 24px;
+  font-family: 'Jet Brains Mono', 'Helvetica', 'Arial', sans-serif;
+  line-height: 30px;
+  letter-spacing: 0%;
+}
+
+.link_text_active {
   color: var(--text-primary, #f2f2f3);
   font-weight: 700;
 }

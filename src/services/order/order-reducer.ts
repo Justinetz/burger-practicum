@@ -40,6 +40,7 @@ export const order = createSlice({
       state.detailsError = false;
     });
     builder.addCase(fetchOrder.rejected, (state) => {
+      state.detailsLoading = false;
       state.detailsError = true;
     });
   },

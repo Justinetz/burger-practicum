@@ -11,6 +11,7 @@ import { fetchOrder } from '../../services/order/order-reducer';
 import { getOrderDetails, isOrderLoading, isOrderFailed } from '../../services/order/order-selector';
 import { isAuthenticated } from '../../services/user/user-selector.ts';
 import { appRoutes, ingredientDragDropKey } from '../../utils/constants';
+import { Loader } from '../loader/loader.tsx';
 import { Modal } from '../modal/modal';
 import { OrderDetails } from '../order-details/order-details';
 import { ConstructorItem } from './constructor-item/constructor-item.tsx';
@@ -127,6 +128,11 @@ export const BurgerConstructor = (): React.JSX.Element => {
         <Modal open={isModalOpen} onClose={closeModal}>
           <OrderDetails details={orderDetails} />
         </Modal>
+      )}
+      {isLoading && (
+        <div>
+          <Loader overlay={true} text="Выполняется оформление заказа..." />
+        </div>
       )}
     </section>
   );

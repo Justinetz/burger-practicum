@@ -1,8 +1,10 @@
 import { BurgerIcon, ListIcon, Logo, ProfileIcon } from '@krgaa/react-developer-burger-ui-components';
-import { useMemo } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import { appRoutes } from '../../utils/constants';
+
+import type { JSX } from 'react';
+import type { To } from 'react-router-dom';
 
 import styles from './app-header.module.css';
 
@@ -10,30 +12,29 @@ import styles from './app-header.module.css';
  * Шапка приложения.
  */
 export const AppHeader = (): React.JSX.Element => {
-  const location = useLocation();
-
-  const pathname = useMemo(() => location.pathname, [location.pathname]);
+  const getLinkContent = (routeTo: To, text: string, getIcon: (isActive: boolean) => JSX.Element) => {
+    return (
+      <NavLink to={routeTo} end className={styles.link}>
+        {({ isActive }) => (
+          <div className={`${styles.link_content} ${isActive ? styles.link_content_active : ''}`}>
+            {getIcon(isActive)}
+            <p className="text text_type_main-default ml-2">{text}</p>
+          </div>
+        )}
+      </NavLink>
+    );
+  };
 
   return (
     <header className={styles.header}>
       <nav className={`${styles.menu} p-4`}>
         <div className={styles.link_container_left}>
-          <NavLink to={appRoutes.main} end>
-            {({ isActive }) => (
-              <div className={`${styles.link} ${isActive ? styles.link_active : ''}`}>
-                <BurgerIcon type={pathname === '/' ? 'primary' : 'secondary'} />
-                <p className="text text_type_main-default ml-2">Конструктор</p>
-              </div>
-            )}
-          </NavLink>
-          <NavLink to={appRoutes.feed} end>
-            {({ isActive }) => (
-              <div className={`${styles.link} ${isActive ? styles.link_active : ''}`}>
-                <ListIcon type={pathname === appRoutes.feed ? 'primary' : 'secondary'} />
-                <p className="text text_type_main-default ml-2">Лента заказов</p>
-              </div>
-            )}
-          </NavLink>
+          {getLinkContent(appRoutes.main, 'Конструктор', (isActive: boolean) => (
+            <BurgerIcon type={isActive ? 'primary' : 'secondary'} />
+          ))}
+          {getLinkContent(appRoutes.feed, 'Лента заказов', (isActive: boolean) => (
+            <ListIcon type={isActive ? 'primary' : 'secondary'} />
+          ))}
         </div>
         <div className={styles.logo}>
           <NavLink to={appRoutes.main} end>
@@ -41,14 +42,9 @@ export const AppHeader = (): React.JSX.Element => {
           </NavLink>
         </div>
         <div className={styles.link_container_right}>
-          <NavLink to={appRoutes.profile} end>
-            {({ isActive }) => (
-              <div className={`${styles.link} ${isActive ? styles.link_active : ''}`}>
-                <ProfileIcon type={pathname === appRoutes.profile ? 'primary' : 'secondary'} />
-                <p className="text text_type_main-default ml-2">Личный кабинет</p>
-              </div>
-            )}
-          </NavLink>
+          {getLinkContent(appRoutes.profile, 'Личный кабинет', (isActive: boolean) => (
+            <ProfileIcon type={isActive ? 'primary' : 'secondary'} />
+          ))}
         </div>
       </nav>
     </header>
