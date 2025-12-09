@@ -15,6 +15,8 @@ import {
   ProfileOrdersPage,
   IngredientPage,
   NotFoundPage,
+  OrderDetailsPage,
+  FeedPage,
 } from '../../pages';
 import { loadAllIngredients } from '../../services/ingredient/ingredients-reducer';
 import { getUser, refreshToken } from '../../services/user/user-reducer';
@@ -105,12 +107,18 @@ export const App = (): React.JSX.Element => {
         >
           <Route path={appRoutes.profile} element={<ProfilePage />} />
           <Route path={appRoutes.profileOrders} element={<ProfileOrdersPage />} />
+          <Route path={appRoutes.profileOrderDetails} element={<OrderDetailsPage />} />
         </Route>
 
         <Route path={appRoutes.ingredientDetails} element={<IngredientPage />} />
+
+        <Route path={appRoutes.feed} element={<FeedPage />} />
+        <Route path={appRoutes.feedDetails} element={<OrderDetailsPage />} />
+
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
+      {/* Роуты для модалок */}
       {background && (
         <Routes>
           <Route
@@ -118,6 +126,22 @@ export const App = (): React.JSX.Element => {
             element={
               <Modal open onClose={closeModal}>
                 <IngredientPage />
+              </Modal>
+            }
+          />
+          <Route
+            path={appRoutes.feedDetails}
+            element={
+              <Modal open onClose={closeModal}>
+                <OrderDetailsPage />
+              </Modal>
+            }
+          />
+          <Route
+            path={appRoutes.profileOrderDetails}
+            element={
+              <Modal open onClose={closeModal}>
+                <OrderDetailsPage />
               </Modal>
             }
           />

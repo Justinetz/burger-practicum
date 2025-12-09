@@ -1,6 +1,7 @@
 import { apiUrl, jwtExpiredErrorText } from '../utils/constants';
 
 import type { TIngredient } from '../utils/ingredient-types';
+import type { TOrder } from '../utils/order-types';
 import type { TLoginUser, TRegisterUser, TUser } from '../utils/user-types';
 
 // #region Response Data
@@ -14,6 +15,12 @@ export type TSendOrderResponseData = {
   order: {
     number: number;
   };
+} & TResponse;
+
+export type TReceiveOrdersResponseData = {
+  orders: TOrder[];
+  total: number;
+  totalToday: number;
 } & TResponse;
 
 export type TUserResponseData = {
@@ -64,19 +71,49 @@ const callRemoteApi = async <T>(operationName: string, api: string, apiData?: Re
   }
 };
 
+export const buildAccessTokenSuffix = (token?: string) => `?token=${token}`;
+
 /** Загрузить все возможные ингредиенты */
 export const loadIngredients = (): Promise<TIngredientsResponseData> => {
   return callRemoteApi<TIngredientsResponseData>('загрузка ингредиентов', 'ingredients');
 };
 
 /** Отправить заказ на сборку */
-export const sendOrder = (ingredientIds: string[]): Promise<TSendOrderResponseData> => {
+export const sendOrder = (ingredientIds: string[], accessToken?: string): Promise<TSendOrderResponseData> => {
   const requestData = {
     ...postRequestData,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
     body: JSON.stringify({ ingredients: ingredientIds }),
   };
 
   return callRemoteApi<TSendOrderResponseData>('отправка заказа', 'orders', requestData);
+};
+
+export const receiveOrders = (accessToken?: string): Promise<TReceiveOrdersResponseData> => {
+  const requestData = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+
+  return callRemoteApi<TReceiveOrdersResponseData>('получение заказов', 'orders/all', requestData);
+};
+
+export const receiveOrderByNumber = (orderNum: number, accessToken?: string): Promise<TReceiveOrdersResponseData> => {
+  const requestData = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+  };
+
+  return callRemoteApi<TReceiveOrdersResponseData>('получение заказ по номеру', `orders/${orderNum}`, requestData);
 };
 
 /** Регистрация нового пользователя */

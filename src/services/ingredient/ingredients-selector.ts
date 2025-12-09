@@ -45,10 +45,12 @@ export const getIngredientCount =
     return main ? main.length : 0;
   };
 
-export const getIngredientById = (id: string) => (state: RootState) => {
-  return state.ingredients.ingredients.find((i) => i._id === id);
-};
+export const getIngredientById =
+  (id: string) =>
+  (state: RootState): TIngredient | undefined => {
+    return state.ingredients.ingredients.find((i) => i._id === id);
+  };
 
-export const isIngredientsLoading = (state: RootState) => {
+export const isIngredientsLoading = (state: RootState): boolean => {
   return state.ingredients.loading;
 };

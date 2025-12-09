@@ -13,7 +13,7 @@ import type {
 } from '../../utils/ingredient-types';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-type IIngredientsState = {
+type TIngredientsState = {
   ingredients: TIngredient[];
 
   loading: boolean;
@@ -30,7 +30,7 @@ type IIngredientsState = {
   };
 };
 
-const initialState: IIngredientsState = {
+const initialState: TIngredientsState = {
   ingredients: [],
   loading: false,
   error: false,
@@ -44,7 +44,7 @@ const initialState: IIngredientsState = {
   selectedId: '',
 };
 
-const calcPrice = (state: IIngredientsState): number => {
+const calcPrice = (state: TIngredientsState): number => {
   const ingredientsToCalc: TIngredientCount[] = [...state.constructor.middles];
   if (state.constructor.bun) {
     ingredientsToCalc.push(state.constructor.bun);

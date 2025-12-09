@@ -7,7 +7,7 @@ import type { TRegisterUser, TUser } from '../../utils/user-types';
 import type { TRefreshTokenResponseData } from '../remote-api-service';
 import type { AppDispatch, RootState } from '../store';
 
-type IUserState = {
+type TUserState = {
   accessToken: string;
   isAuthenticated: boolean;
 
@@ -20,7 +20,7 @@ type IUserState = {
   authInitialized: boolean;
 };
 
-const initialState: IUserState = {
+const initialState: TUserState = {
   accessToken: '',
   isAuthenticated: false,
 

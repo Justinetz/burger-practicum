@@ -11,11 +11,11 @@ import type { TIngredientCountWithId, TIngredient } from '../../../utils/ingredi
 
 import styles from './constructor-item.module.css';
 
-export type ConstructorItemProps = {
+export type TConstructorItemProps = {
   item: TIngredient & TIngredientCountWithId & { burgerType: 'top' | 'bottom' | 'middle' };
 };
 
-export const ConstructorItem = (props: ConstructorItemProps) => {
+export const ConstructorItem = (props: TConstructorItemProps) => {
   const { item } = props;
 
   const dispatch = useAppDispatch();

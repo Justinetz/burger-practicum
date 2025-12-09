@@ -1,10 +1,10 @@
 import acceptIcon from '../../images/order-accept.svg';
 
-import type { TOrderDetails } from '../../utils/order-types';
+import type { TSendOrderDetails } from '../../utils/order-types';
 
 import styles from './order-details.module.css';
 
-export const OrderDetails = (props: { details: TOrderDetails }): React.JSX.Element | null => {
+export const OrderDetails = (props: { details: TSendOrderDetails }): React.JSX.Element | null => {
   const { details } = props;
   return (
     <div>

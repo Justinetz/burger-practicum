@@ -2,6 +2,9 @@
 
 export const apiUrl = 'https://norma.education-services.ru/api/';
 
+export const wsUrl = 'wss://norma.education-services.ru/';
+export const wsOrdersApi = 'orders/all';
+
 export const jwtExpiredErrorText = 'jwt expired';
 
 //#endregion
@@ -12,6 +15,7 @@ export const jwtExpiredErrorText = 'jwt expired';
 export const appRoutes = {
   /** Главная страница, конструктор бургеров */
   main: '/',
+
   /** Страница авторизации */
   login: '/login',
   /** Страница авторизации */
@@ -20,13 +24,21 @@ export const appRoutes = {
   forgotPassword: '/forgot-password',
   /** Страница сброса пароля */
   resetPassword: '/reset-password',
-  /** Страница с настройками профиля пользователя */
-  profile: '/profile',
+
   /** Страница ингредиента */
   ingredientDetails: '/ingredients/:id',
+
+  /** Страница с настройками профиля пользователя */
+  profile: '/profile',
   /** Страница ленты заказов пользователя */
   profileOrders: '/profile/orders',
+  /** Страница заказа в истории заказов пользователя */
+  profileOrderDetails: '/profile/orders/:number',
+
+  /** Лента заказов */
   feed: '/feed',
+  /** Страница заказа в ленте */
+  feedDetails: '/feed/:number',
 
   builder: {
     ingredientDetails: (id: string) => `/ingredients/${id}`,

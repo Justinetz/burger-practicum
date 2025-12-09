@@ -1,0 +1,49 @@
+.card_root {
+  display: block;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 24px;
+  color: inherit;
+  text-decoration: none;
+  background-color: #1c1c21;
+  border-radius: 40px;
+}
+
+.card_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.card_title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.card_details {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.card_ingredients_list {
+  display: flex;
+  flex-direction: row-reverse;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card_price_container {
+  display: flex;
+  align-items: center;
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+.card_price {
+  margin-right: 8px;
+}
