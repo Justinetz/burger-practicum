@@ -2,12 +2,12 @@ import type { FC } from 'react';
 
 import styles from './loader.module.css';
 
-type ILoaderProps = {
+type TLoaderProps = {
   text?: string;
   overlay: boolean;
 };
 
-export const Loader: FC<ILoaderProps> = (props: ILoaderProps) => {
+export const Loader: FC<TLoaderProps> = (props: TLoaderProps) => {
   const { overlay, text } = props;
   return (
     <div className={overlay ? styles.overlay : ''}>

@@ -1,11 +1,10 @@
 import { useState } from 'react';
 
+import type { TModel } from '../utils';
 import type { ChangeEvent } from 'react';
 
-export type IModel = Record<string, string>;
-
-export function useForm(inputValues: IModel) {
-  const [values, setValues] = useState<IModel>(inputValues);
+export function useForm(inputValues: TModel) {
+  const [values, setValues] = useState<TModel>(inputValues);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;

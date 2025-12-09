@@ -8,7 +8,7 @@ import { useForm } from '../../hooks/use-form';
 import { register } from '../../services/user/user-reducer';
 import { appRoutes } from '../../utils/constants';
 
-import type { IModel } from '../../hooks/use-form';
+import type { TModel } from '../../utils';
 import type { TRegisterUser } from '../../utils/user-types';
 import type React from 'react';
 
@@ -16,7 +16,7 @@ export const RegisterPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { values, handleChange } = useForm({} as IModel);
+  const { values, handleChange } = useForm({} as TModel);
 
   const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();

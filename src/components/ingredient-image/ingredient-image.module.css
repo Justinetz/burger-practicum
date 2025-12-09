@@ -1,0 +1,23 @@
+.card_ingredient {
+  position: relative;
+  box-sizing: content-box;
+  width: 60px;
+  height: 60px;
+  margin: 0;
+  padding: 2px;
+  background: linear-gradient(63.18deg, #801ab3 0%, #4c4cff 100%);
+  border-radius: 50%;
+}
+
+.card_ingredient:not(:last-child) {
+  margin-left: -15px;
+}
+
+.card_ingredient_image {
+  display: block;
+  width: 60px;
+  height: 60px;
+  background: #131316;
+  border-radius: 50%;
+  object-fit: cover;
+}

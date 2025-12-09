@@ -17,7 +17,7 @@ export const ProtectedRouteElement = (props: ProtectedRouteProps): JSX.Element =
   const { isAllowed, isReady, redirectPath, children, fallback } = props;
   const location = useLocation();
 
-  if (!isReady)
+  if (!isReady) {
     return (
       <>
         {fallback ?? (
@@ -25,6 +25,7 @@ export const ProtectedRouteElement = (props: ProtectedRouteProps): JSX.Element =
         )}
       </>
     );
+  }
 
   if (!isAllowed) {
     return <Navigate to={redirectPath} state={{ from: location }} replace />;

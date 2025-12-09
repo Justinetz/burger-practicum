@@ -7,8 +7,8 @@ import { useModal } from '../../hooks/use-modal';
 import { useAppSelector } from '../../hooks/use-selector';
 import { markIngredientInUse, resetIngredientsInUse } from '../../services/ingredient/ingredients-reducer';
 import { getBun, getMiddles, getTotalPrice } from '../../services/ingredient/ingredients-selector';
-import { fetchOrder } from '../../services/order/order-reducer';
-import { getOrderDetails, isOrderLoading, isOrderFailed } from '../../services/order/order-selector';
+import { postOrder } from '../../services/order/order-reducer';
+import { geTSendOrderDetails, isOrderLoading, isOrderFailed } from '../../services/order/order-selector';
 import { isAuthenticated } from '../../services/user/user-selector.ts';
 import { appRoutes, ingredientDragDropKey } from '../../utils/constants';
 import { Loader } from '../loader/loader.tsx';
@@ -33,7 +33,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
   const bun = useAppSelector(getBun);
   const middles = useAppSelector(getMiddles);
   const totalPrice = useAppSelector(getTotalPrice);
-  const orderDetails = useAppSelector(getOrderDetails);
+  const orderDetails = useAppSelector(geTSendOrderDetails);
   const isLoading = useAppSelector(isOrderLoading);
   const isFailed = useAppSelector(isOrderFailed);
 
@@ -56,7 +56,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
     }
 
     const allIds = [bun, ...middles].map((ingredient) => ingredient!._id);
-    dispatch(fetchOrder(allIds)).then(() => {
+    dispatch(postOrder(allIds)).then(() => {
       if (!isLoading && !isFailed) {
         dispatch(resetIngredientsInUse());
       }
