@@ -10,10 +10,11 @@ const selectors = {
   middlesRoot: '[class*=middle_item_root]',
   ingredientCard: '[class*=burger_ingredient_card]',
   constructor: '[class*=burger_constructor]',
+  totalPrice: '[data-cy="total-price"]',
   postOrderNum: '[class*=order_num]',
   modal: '[class*=modal_root]',
   modalCloseButton: '[class*=modal_close]',
-  ingredientContainer: '[class*=ingredients_container]'
+  ingredientContainer: '[class*=ingredients_container]',
 };
 
 describe('Burger constructor is ok', () => {
@@ -35,7 +36,7 @@ describe('Burger constructor is ok', () => {
     }).as('postOrder');
     cy.intercept('POST', '**/auth/token', {
       statusCode: 200,
-      body: { success: true, accessToken: 'Bearer token', refreshToken: 'refresh' } as TRefreshTokenResponseData,
+      body: { success: true, accessToken: 'token', refreshToken: 'refresh' } as TRefreshTokenResponseData,
     }).as('refreshToken');
     cy.intercept('GET', '**/auth/user', {
       statusCode: 200,
@@ -57,12 +58,13 @@ describe('Burger constructor is ok', () => {
     cy.get('[name^=password]').type('12345678');
     cy.contains('button', 'Войти').click();
     cy.wait('@login');
-
-    cy.visit('/');
-    cy.wait(['@getIngredients', '@refreshToken', '@getUser']);
   });
 
   it('burger constructor should work', () => {
+    cy.visit('/');
+    cy.get(selectors.totalPrice).as('totalPrice');
+
+    cy.get('@totalPrice').should('have.text', '0');
     cy.contains('button', 'Оформить заказ').should('be.disabled');
 
     dropIngredientToConstructor('Булка с кунжутом');
@@ -72,21 +74,23 @@ describe('Burger constructor is ok', () => {
     cy.contains(selectors.middlesRoot, 'Булка с кунжутом (низ)').should('exist');
     cy.contains(selectors.middlesRoot, 'Котлета из марсианской говядины').should('exist');
 
-    cy.get('#total-price').should('have.text', '270'); // спан внутри блока
+    cy.get('@totalPrice').should('have.text', '270');
     cy.contains('button', 'Оформить заказ').should('not.be.disabled').click();
 
     cy.wait('@postOrder');
     cy.contains(selectors.postOrderNum, '424242').should('be.visible');
   });
 
-    it("ingredients popups should work", () => {
-        cy.get(selectors.ingredientCard).first().click();
+  it('ingredients popups should work', () => {
+    cy.visit('/');
 
-        cy.get(selectors.modal).should("be.visible");
-        cy.get(selectors.ingredientContainer).should("be.visible");
+    cy.get(selectors.ingredientCard).first().click();
 
-        cy.get(selectors.modalCloseButton).click();
-        cy.get(selectors.modal).should("not.exist");
-        cy.get(selectors.ingredientContainer).should("not.exist");
-    });
+    cy.get(selectors.modal).should('be.visible');
+    cy.get(selectors.ingredientContainer).should('be.visible');
+
+    cy.get(selectors.modalCloseButton).click();
+    cy.get(selectors.modal).should('not.exist');
+    cy.get(selectors.ingredientContainer).should('not.exist');
+  });
 });

@@ -111,7 +111,7 @@ export const BurgerConstructor = (): React.JSX.Element => {
         </div>
       </div>
       <div className={`${styles.burger_constructor_total}`}>
-        <span className="text text_type_digits-medium" id="total-price">
+        <span className="text text_type_digits-medium" data-cy="total-price">
           {totalPrice}
         </span>
         <CurrencyIcon className="p-1 pr-10" type="primary" />
