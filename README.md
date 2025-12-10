@@ -7,7 +7,7 @@
 
 ## Где можно посмотреть
 
-https://justinetz.github.io/burger-practicum/index.html
+https://justinetz.github.io/burger-practicum/
 
 **Рекомендация:**
 Для самостоятельного запуска и доработки проекта нужно
