@@ -11,6 +11,9 @@ const selectors = {
   ingredientCard: '[class*=burger_ingredient_card]',
   constructor: '[class*=burger_constructor]',
   postOrderNum: '[class*=order_num]',
+  modal: '[class*=modal_root]',
+  modalCloseButton: '[class*=modal_close]',
+  ingredientContainer: '[class*=ingredients_container]'
 };
 
 describe('Burger constructor is ok', () => {
@@ -75,4 +78,15 @@ describe('Burger constructor is ok', () => {
     cy.wait('@postOrder');
     cy.contains(selectors.postOrderNum, '424242').should('be.visible');
   });
+
+    it("ingredients popups should work", () => {
+        cy.get(selectors.ingredientCard).first().click();
+
+        cy.get(selectors.modal).should("be.visible");
+        cy.get(selectors.ingredientContainer).should("be.visible");
+
+        cy.get(selectors.modalCloseButton).click();
+        cy.get(selectors.modal).should("not.exist");
+        cy.get(selectors.ingredientContainer).should("not.exist");
+    });
 });
