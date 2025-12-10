@@ -4,7 +4,7 @@ import { wsStoreActions } from '../../utils/socket-types';
 
 import type { IWsOrdersState, TOrder } from '../../utils/order-types';
 
-const initialState: IWsOrdersState = {
+export const initialState: IWsOrdersState = {
   orders: undefined,
   total: undefined,
   totalToday: undefined,

@@ -18,7 +18,7 @@ type TOrderState = {
   orders: TOrder[] | undefined;
 };
 
-const initialState: TOrderState = {
+export const initialState: TOrderState = {
   details: {
     name: '',
     order: {
