@@ -53,11 +53,7 @@ describe('Burger constructor is ok', () => {
     }).as('login');
 
     // Login
-    cy.visit('/login');
-    cy.get('[name^=email]').type('my@evpronina.ru');
-    cy.get('[name^=password]').type('12345678');
-    cy.contains('button', 'Войти').click();
-    cy.wait('@login');
+    cy.login('my@evpronina.ru', '12345678');
   });
 
   it('burger constructor should work', () => {
