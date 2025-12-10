@@ -1,5 +1,6 @@
 {
-  "name": "vite_bundler",
+  "name": "cosmic-burger-cafe",
+  "homepage": "/", 
   "private": true,
   "version": "0.0.0",
   "type": "module",

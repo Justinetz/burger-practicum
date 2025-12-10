@@ -7,7 +7,7 @@
 
 ## Где можно посмотреть
 
-TBD
+https://justinetz.github.io/burger-practicum/index.html
 
 **Рекомендация:**
 Для самостоятельного запуска и доработки проекта нужно
