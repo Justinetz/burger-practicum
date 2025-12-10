@@ -19,7 +19,7 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
-  base: '',
+  base: '/burger-practicum',
   test: {
     globals: true,
     environment: 'jsdom',
