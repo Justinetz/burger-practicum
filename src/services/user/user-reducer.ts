@@ -20,7 +20,7 @@ type TUserState = {
   authInitialized: boolean;
 };
 
-const initialState: TUserState = {
+export const initialState: TUserState = {
   accessToken: '',
   isAuthenticated: false,
 
